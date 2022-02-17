@@ -94,7 +94,7 @@ aside h1 svg path {
  *  Navigation   *
 \* * * * * * * * */
 
-aside nav {
+nav {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -102,13 +102,13 @@ aside nav {
     height: 100%;
 }
 
-aside nav #empty_space {
+nav #empty_space {
     flex: 1;
 }
 
-aside nav a,
-aside nav a:link,
-aside nav a:visited {
+nav a,
+nav a:link,
+nav a:visited {
     color: var(--color-accent);
     display: block;
     font-size: 1.2em;
@@ -117,7 +117,7 @@ aside nav a:visited {
     text-shadow: 0.1rem 0.1rem 0.1rem var(--color-shadow);
 }
 
-aside nav a svg {
+nav a svg {
     filter: drop-shadow(0.1rem 0.1rem 0.1rem var(--color-shadow));
     margin-right: 0.5rem;
     height: 1.2em;
@@ -125,57 +125,57 @@ aside nav a svg {
     width: 1.2em;
 }
 
-aside nav a svg path {
+nav a svg path {
     fill: var(--color-accent);
 }
 
-aside nav a:hover,
-aside nav a:focus,
-aside nav a:active {
+nav a:hover,
+nav a:focus,
+nav a:active {
     color: var(--color-title);
     text-decoration: none;
     transform: scale(1.2);
     text-shadow: 0 0 0.2rem var(--color-title);
 }
 
-aside nav a:hover svg,
-aside nav a:focus svg,
-aside nav a:active svg {
+nav a:hover svg,
+nav a:focus svg,
+nav a:active svg {
     filter: drop-shadow(0 0 0.2rem var(--color-title));
     margin-left: 0.5rem;
 }
 
-aside nav a:hover svg path,
-aside nav a:focus svg path,
-aside nav a:active svg path {
+nav a:hover svg path,
+nav a:focus svg path,
+nav a:active svg path {
     fill: var(--color-title);
 }
 
-aside nav a.disable,         aside nav a.disable:link,
-aside nav a.disable:visited, aside nav a.disable:hover,
-aside nav a.disable:focus,   aside nav a.disable:active {
+nav a.disable,         nav a.disable:link,
+nav a.disable:visited, nav a.disable:hover,
+nav a.disable:focus,   nav a.disable:active {
     color: var(--color-text);
     cursor: default;
     text-shadow: none;
     transform: none;
 }
 
-aside nav a.disable svg,         aside nav a.disable:link svg,
-aside nav a.disable:visited svg, aside nav a.disable:hover svg,
-aside nav a.disable:focus svg,   aside nav a.disable:active svg {
+nav a.disable svg,         nav a.disable:link svg,
+nav a.disable:visited svg, nav a.disable:hover svg,
+nav a.disable:focus svg,   nav a.disable:active svg {
     cursor: default;
     filter: none;
     margin-left: 0;
 }
 
-aside nav a.disable svg path,         aside nav a.disable:link svg path,
-aside nav a.disable:visited svg path, aside nav a.disable:hover svg path,
-aside nav a.disable:focus svg path,   aside nav a.disable:active svg path {
+nav a.disable svg path,         nav a.disable:link svg path,
+nav a.disable:visited svg path, nav a.disable:hover svg path,
+nav a.disable:focus svg path,   nav a.disable:active svg path {
     cursor: default;
     fill: var(--color-text);
 }
 
-aside #nav_projects_list .bubble {
+#nav_projects_list .bubble {
     background-color: var(--color-accent);
     border-radius: 0.6rem;
     box-shadow: 0.1rem 0.1rem 0.1rem var(--color-shadow);
@@ -191,9 +191,9 @@ aside #nav_projects_list .bubble {
     width: 1.2rem;
 }
 
-aside #nav_projects_list a:hover .bubble,
-aside #nav_projects_list a:focus .bubble,
-aside #nav_projects_list a:active .bubble {
+#nav_projects_list a:hover .bubble,
+#nav_projects_list a:focus .bubble,
+#nav_projects_list a:active .bubble {
     background-color: var(--color-title);
     box-shadow: 0 0 0.2rem var(--color-title);
     color: var(--color-item);
