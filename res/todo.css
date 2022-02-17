@@ -1,0 +1,301 @@
+/* Import Assets */
+@import 'https://deanwagner.github.io/odin_project/modules/modal/modal.css';
+
+
+
+:root {
+    --color-shadow : #000000;
+    --color-bg     : #333333;
+    --color-item   : #666666;
+    --color-text   : #cccccc;
+    --color-accent : #00ccff;
+    --color-title  : #eeeeee;
+}
+
+* {
+    box-sizing: border-box;
+    cursor: default;
+}
+
+/* * * * * * * * *\
+ * Element Base  *
+\* * * * * * * * */
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    align-items: flex-start;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    display: flex;
+    font-family: Tahoma, Verdana, Geneva, sans-serif;
+    font-size: 12pt;
+    justify-content: flex-start;
+    margin: 0;
+    min-height: 100vh;
+    padding: 0;
+    text-shadow: 0.1em 0.1em 0.2em var(--color-shadow);
+}
+
+a, a * {
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+}
+
+a, a:link, a:visited {
+    color: var(--color-accent);
+    text-decoration: none;
+    text-shadow: 0.1em 0.1em 0.15em var(--color-shadow);
+}
+
+a:hover, a:focus, a:active {
+    text-decoration: underline;
+    text-shadow: 0 0 0.2em var(--color-accent);
+}
+
+/* * * * * * * * *\
+ *     Aside     *
+\* * * * * * * * */
+
+aside {
+    background-color: var(--color-item);
+    box-shadow: 0 0 1em var(--color-shadow);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 1em;
+}
+
+aside h1, header h2 {
+    color: var(--color-title);
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 3em;
+    font-weight: normal;
+    letter-spacing: 0.2rem;
+    text-shadow: 0.15rem 0.15rem 0 var(--color-shadow);
+}
+
+aside h1 svg {
+    filter: drop-shadow(0.15rem 0.15rem 0 var(--color-shadow));
+    height: 1em;
+    vertical-align: top;
+    width: 1em;
+}
+
+aside h1 svg path {
+    fill: var(--color-title);
+}
+
+/* * * * * * * * *\
+ *  Navigation   *
+\* * * * * * * * */
+
+aside nav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 0 1em;
+    height: 100%;
+}
+
+aside nav #empty_space {
+    flex: 1;
+}
+
+aside nav a,
+aside nav a:link,
+aside nav a:visited {
+    color: var(--color-accent);
+    display: block;
+    font-size: 1.2em;
+    text-decoration: none;
+    padding: 1em 0 0;
+    text-shadow: 0.1rem 0.1rem 0.1rem var(--color-shadow);
+}
+
+aside nav a svg {
+    filter: drop-shadow(0.1rem 0.1rem 0.1rem var(--color-shadow));
+    margin-right: 0.5rem;
+    height: 1.2em;
+    vertical-align: bottom;
+    width: 1.2em;
+}
+
+aside nav a svg path {
+    fill: var(--color-accent);
+}
+
+aside nav a:hover,
+aside nav a:focus,
+aside nav a:active {
+    color: var(--color-title);
+    text-decoration: none;
+    transform: scale(1.2);
+    text-shadow: 0 0 0.2rem var(--color-title);
+}
+
+aside nav a:hover svg,
+aside nav a:focus svg,
+aside nav a:active svg {
+    filter: drop-shadow(0 0 0.2rem var(--color-title));
+    margin-left: 0.5rem;
+}
+
+aside nav a:hover svg path,
+aside nav a:focus svg path,
+aside nav a:active svg path {
+    fill: var(--color-title);
+}
+
+aside nav a.disable,         aside nav a.disable:link,
+aside nav a.disable:visited, aside nav a.disable:hover,
+aside nav a.disable:focus,   aside nav a.disable:active {
+    color: var(--color-text);
+    cursor: default;
+    text-shadow: none;
+    transform: none;
+}
+
+aside nav a.disable svg,         aside nav a.disable:link svg,
+aside nav a.disable:visited svg, aside nav a.disable:hover svg,
+aside nav a.disable:focus svg,   aside nav a.disable:active svg {
+    cursor: default;
+    filter: none;
+    margin-left: 0;
+}
+
+aside nav a.disable svg path,         aside nav a.disable:link svg path,
+aside nav a.disable:visited svg path, aside nav a.disable:hover svg path,
+aside nav a.disable:focus svg path,   aside nav a.disable:active svg path {
+    cursor: default;
+    fill: var(--color-text);
+}
+
+aside #nav_projects_list .bubble {
+    background-color: var(--color-accent);
+    border-radius: 0.6rem;
+    box-shadow: 0.1rem 0.1rem 0.1rem var(--color-shadow);
+    color: var(--color-bg);
+    display: inline-block;
+    font-size: 0.8rem;
+    height: 1.2rem;
+    margin-right: 0.5rem;
+    padding: 0.1em 0;
+    text-align: center;
+    text-shadow: none;
+    vertical-align: bottom;
+    width: 1.2rem;
+}
+
+aside #nav_projects_list a:hover .bubble,
+aside #nav_projects_list a:focus .bubble,
+aside #nav_projects_list a:active .bubble {
+    background-color: var(--color-title);
+    box-shadow: 0 0 0.2rem var(--color-title);
+    color: var(--color-item);
+    margin-left: 0.5rem;
+    text-shadow: 0 0 0.1rem var(--color-item);
+}
+
+/* * * * * * * * *\
+ *    Section    *
+\* * * * * * * * */
+
+section {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 1em 2em;
+}
+
+/* * * * * * * * *\
+ *    Header     *
+\* * * * * * * * */
+
+header {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* * * * * * * * *\
+ *  GitHub Icon  *
+\* * * * * * * * */
+
+.github-icon {
+    filter: drop-shadow(0.15em 0.15em 0.15em var(--color-shadow));
+    height: 2.3em;
+    transition: all 0.2s ease-out;
+    width: 2.3em;
+}
+
+.github-path {
+    fill: var(--color-accent);
+}
+
+.github-link:hover,
+.github-link:focus,
+.github-link:active {
+}
+
+.github-link:hover .github-icon,
+.github-link:focus .github-icon,
+.github-link:active .github-icon {
+    filter: drop-shadow(0 0 0.3em var(--color-title));
+    transform: rotate(360deg) scale(1.5);
+}
+
+.github-link:hover .github-path,
+.github-link:focus .github-path,
+.github-link:active .github-path {
+    fill: var(--color-title);
+}
+
+/* * * * * * * * *\
+ *     Main      *
+\* * * * * * * * */
+
+main {
+    flex: 1;
+    width: 100%;
+}
+
+main table {
+    border: none;
+    border-collapse: separate;
+    border-spacing: 0 2em;
+    width: 100%;
+}
+
+main table tr {
+    background-color: var(--color-item);
+    box-shadow: 0 0 1rem var(--color-shadow);
+}
+
+main table tr td,
+main table tr th {
+    padding: 1em;
+}
+
+main table tfoot tr td:last-child {
+    text-align: right;
+}
+
+/* * * * * * * * *\
+ *    Footer     *
+\* * * * * * * * */
+
+footer {
+    display: block;
+    font-size: 0.8em;
+    text-align: center;
+    width: 100%;
+}

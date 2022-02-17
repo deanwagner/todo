@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Dean Wagner">
+        <meta name="description" content="To-Do List Manager">
+        <title>T O D O : </title>
+        <link rel="icon" sizes="any" type="image/svg+xml" href="./img/todo.svg">
+        <!--<link rel="manifest" href="todo.webmanifest">-->
+        <link rel="stylesheet" href="./res/todo.css">
+        <script type="module">
+            import ToDo from './res/todo.js';
+            window.addEventListener('DOMContentLoaded', () => {
+                new ToDo;
+            });
+        </script>
+    </head>
+    <body>
+        <aside>
+            <h1><svg viewBox="0 0 512 512"><path d="M267.07,2.46l-2.49-1.13a14.62,14.62,0,0,0-19,6.37L1.4,491.34a13.26,13.26,0,0,0,6.71,18.07l2.49,1.13c7.11,3.23,15.63.38,19-6.36L273.78,20.53A13.26,13.26,0,0,0,267.07,2.46Zm236.82.13L501.4,1.46c-7.11-3.23-15.63-.38-19,6.36L238.22,491.47a13.26,13.26,0,0,0,6.71,18.07l2.49,1.13a14.62,14.62,0,0,0,19-6.37L510.6,20.66A13.26,13.26,0,0,0,503.89,2.59Z"/></svg>TODO:</h1>
+            <nav>
+                <a class="disable" id="nav_all" href="#"><svg viewBox="0 0 24 24"><path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" /></svg><span class="label">All Tasks</span></a>
+                <a id="nav_today" href="#"><svg viewBox="0 0 24 24"><path d="M7,10H12V15H7M19,19H5V8H19M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" /></svg><span class="label">Today</span></a>
+                <a id="nav_upcoming" href="#"><svg viewBox="0 0 24 24"><path d="M12,12L8,16H11V22H13V16H16M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H9V20H5V9H19V20H15V22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4Z" /></svg><span class="label">Upcoming</span></a>
+                <a id="nav_overdue" href="#"><svg viewBox="0 0 24 24"><path d="M6 1V3H5C3.89 3 3 3.89 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3H18V1H16V3H8V1H6M5 8H19V19H5V7M11 9V14H13V9H11M11 16V18H13V16H11Z" /></svg><span class="label">Overdue</span></a>
+                <a id="nav_projects" href="#"><svg viewBox="0 0 24 24"><path d="M4 6H2V20C2 21.1 2.9 22 4 22H18V20H4V6M20 2H8C6.9 2 6 2.9 6 4V16C6 17.1 6.9 18 8 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2M20 12L17.5 10.5L15 12V4H20V12Z" /></svg><span class="label">Projects</span></a>
+                <div id="nav_projects_list">
+                    <a href="#"><span class="bubble">3</span><span class="label">Some Project</span></a>
+                </div>
+                <a id="nav_new" href="#"><svg viewBox="0 0 24 24"><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" /></svg><span class="label">New Project</span></a>
+                <a id="nav_archive" href="#"><svg viewBox="0 0 24 24"><path d="M3,3H21V7H3V3M4,8H20V21H4V8M9.5,11A0.5,0.5 0 0,0 9,11.5V13H15V11.5A0.5,0.5 0 0,0 14.5,11H9.5Z" /></svg>Archive</a>
+                <div id="empty_space"></div>
+                <a id="nav_settings" href="#"><svg viewBox="0 0 24 24"><path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" /></svg><span class="label">Settings</span></a>
+                <a id="nav_restore" href="#"><svg viewBox="0 0 24 24"><path d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3" /></svg><span class="label">Restore</span></a>
+            </nav>
+        </aside>
+        <section>
+            <header>
+                <h2>All Tasks</h2>
+                <a title="GitHub Repo for this Project" class="github-link" href="https://github.com/deanwagner/todo"><svg class="github-icon" viewBox="0 0 32 32"><path class="github-path" d="M16.0018,0A16.2088,16.2088,0,0,0,0,16.4223,16.4156,16.4156,0,0,0,10.7179,31.9376c.84.2166.7114-.3966.7114-.8153v-2.846c-4.8513.5839-5.0479-2.7138-5.3732-3.2646-.6578-1.1531-2.213-1.4469-1.7482-1.9977,1.1047-.5839,2.2308.1469,3.5357,2.1262.9438,1.4359,2.7849,1.1935,3.718.9548a4.664,4.664,0,0,1,1.24-2.2327c-5.0264-.9254-7.1214-4.0762-7.1214-7.8219A7.3467,7.3467,0,0,1,7.4074,11.204a6.5675,6.5675,0,0,1,.1752-4.4067C9.66,6.6064,11.819,8.325,11.987,8.4609a15.14,15.14,0,0,1,4.0362-.5,15.1577,15.1577,0,0,1,4.0577.51c.404-.3158,2.406-1.7921,4.3365-1.6121a6.6124,6.6124,0,0,1,.1966,4.3332,7.3488,7.3488,0,0,1,1.7482,4.8584c0,3.7531-2.1093,6.9075-7.15,7.8182a4.7469,4.7469,0,0,1,1.362,3.3418v4.1313c.0286.3305,0,.6573.5363.6573A16.4082,16.4082,0,0,0,32,16.426,16.2136,16.2136,0,0,0,16.0018,0Z" /></svg></a>
+            </header>
+            <main>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Alpha</th>
+                            <th>Bravo</th>
+                            <th>Charlie</th>
+                            <th>Delta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Echo</td>
+                            <td>Foxtrot</td>
+                            <td>Golf</td>
+                            <td>Hotel</td>
+                        </tr>
+                        <tr>
+                            <td>India</td>
+                            <td>Juliet</td>
+                            <td>Kilo</td>
+                            <td>Lima</td>
+                        </tr>
+                        <tr>
+                            <td>Mike</td>
+                            <td>November</td>
+                            <td>Oscar</td>
+                            <td>Papa</td>
+                        </tr>
+                        <tr>
+                            <td>Quebec</td>
+                            <td>Romeo</td>
+                            <td>Sierra</td>
+                            <td>Tango</td>
+                        </tr>
+                        <tr>
+                            <td>Uniform</td>
+                            <td>Victor</td>
+                            <td>Whiskey</td>
+                            <td>X-Ray</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">Yankee</td>
+                            <td colspan="2">Zulu</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </main>
+            <footer>
+                Created by <a href="https://deanwagner.net/" rel="external" target="_blank">Dean Wagner</a>
+                for <a href="https://theodinproject.com/" rel="external" target="_blank">The Odin Project</a>
+            </footer>
+        </section>
+    </body>
+</html>
