@@ -1,10 +1,10 @@
 "use strict";
 
 /**
- * User Settings
+ * Theme Manager
  * @class
  */
-class Settings {
+class Theme {
 
     /**
      * Constructor
@@ -16,4 +16,4 @@ class Settings {
 
 }
 
-export default Settings;
+export default Theme;
