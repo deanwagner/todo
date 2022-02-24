@@ -1,20 +1,58 @@
 /* Import Assets */
-@import 'https://deanwagner.github.io/odin_project/modules/modal/modal.css';
+@import 'https://deanwagner.github.io/modules/modal/modal.css';
 
-
+/* * * * * * * * * * * *\
+ *     To-Do List      *
+ *                     *
+ *  By: Dean Wagner    *
+ * info@deanwagner.net *
+ *                     *
+ *   Assignment for:   *
+ *  The Odin Project   *
+ * theodinproject.com  *
+\* * * * * * * * * * * */
 
 :root {
-    --color-shadow : #000000;
+    /* Default Colors */
+    --color-shadow : #080808;
     --color-bg     : #333333;
     --color-item   : #666666;
     --color-text   : #cccccc;
-    --color-accent : #00ccff;
-    --color-title  : #eeeeee;
+    --color-accent : #99ffff;
+    --color-title  : #fafafa;
+
+    /* Shadow/Glow */
+    --shadow-text  : 0.05rem 0.05rem 0.2rem var(--color-shadow);
+    --shadow-title : 0.15rem 0.15rem 0.05rem var(--color-shadow);
+    --shadow-link  : 0.1rem 0.1rem 0.1rem var(--color-shadow);
+    --shadow-box   : 0 0 1rem var(--color-shadow);
+    --glow-text    : 0 0 0.2rem var(--color-title);
+    --glow-box     : 0 0 0.8rem var(--color-title);
+
+    /* Borders */
+    --border-solid  : 1px solid var(--color-title);
+    --outline-solid : 2px solid var(--color-accent);
+
+    /* Font Families */
+    --font-base  : Tahoma, Verdana, Geneva, sans-serif;
+    --font-input : 'Courier New', Courier, monospace;
+
+    /* Transitions */
+    --transition-all : all 0.2s ease-out;
+
+    /* Gradients */
+    --gradient-light : linear-gradient(to bottom right, rgba(255,255,255,0.4), rgba(255,255,255,0));
+    --gradient-split : linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(0,0,0,0.3));
+    --gradient-dark  : linear-gradient(to bottom right, rgba(0,0,0,0), rgba(0,0,0,0.5));
+
+    /* Browser Theme */
+    color-scheme: dark;
 }
 
 * {
     box-sizing: border-box;
     cursor: default;
+    accent-color: var(--color-accent);
 }
 
 /* * * * * * * * *\
@@ -31,29 +69,30 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text);
     display: flex;
-    font-family: Tahoma, Verdana, Geneva, sans-serif;
+    font-family: var(--font-base);
     font-size: 12pt;
     justify-content: flex-start;
     margin: 0;
     min-height: 100vh;
     padding: 0;
-    text-shadow: 0.1em 0.1em 0.2em var(--color-shadow);
+    text-shadow: var(--shadow-text);
 }
 
 a, a * {
     cursor: pointer;
-    transition: all 0.2s ease-out;
+    transition: var(--transition-all);
 }
 
 a, a:link, a:visited {
     color: var(--color-accent);
     text-decoration: none;
-    text-shadow: 0.1em 0.1em 0.15em var(--color-shadow);
+    text-shadow: var(--shadow-link);
 }
 
 a:hover, a:focus, a:active {
+    color: var(--color-title);
     text-decoration: underline;
-    text-shadow: 0 0 0.2em var(--color-accent);
+    text-shadow: var(--glow-text);
 }
 
 /* * * * * * * * *\
@@ -61,8 +100,8 @@ a:hover, a:focus, a:active {
 \* * * * * * * * */
 
 aside {
-    background-color: var(--color-item);
-    box-shadow: 0 0 1em var(--color-shadow);
+    background: var(--color-item) var(--gradient-split);
+    box-shadow: var(--shadow-box);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -72,15 +111,15 @@ aside {
 aside h1, header h2 {
     color: var(--color-title);
     margin: 0;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: var(--font-input);
     font-size: 3em;
     font-weight: normal;
     letter-spacing: 0.2rem;
-    text-shadow: 0.15rem 0.15rem 0 var(--color-shadow);
+    text-shadow: var(--shadow-title);
 }
 
 aside h1 svg {
-    filter: drop-shadow(0.15rem 0.15rem 0 var(--color-shadow));
+    filter: drop-shadow(var(--shadow-title));
     height: 1em;
     vertical-align: top;
     width: 1em;
@@ -114,11 +153,11 @@ nav a:visited {
     font-size: 1.2em;
     text-decoration: none;
     padding: 1em 0 0;
-    text-shadow: 0.1rem 0.1rem 0.1rem var(--color-shadow);
+    text-shadow: var(--shadow-link);
 }
 
 nav a svg {
-    filter: drop-shadow(0.1rem 0.1rem 0.1rem var(--color-shadow));
+    filter: drop-shadow(var(--shadow-link));
     margin-right: 0.5rem;
     height: 1.2em;
     vertical-align: bottom;
@@ -135,13 +174,13 @@ nav a:active {
     color: var(--color-title);
     text-decoration: none;
     transform: scale(1.2);
-    text-shadow: 0 0 0.2rem var(--color-title);
+    text-shadow: var(--glow-text);
 }
 
 nav a:hover svg,
 nav a:focus svg,
 nav a:active svg {
-    filter: drop-shadow(0 0 0.2rem var(--color-title));
+    filter: drop-shadow(var(--glow-text));
     margin-left: 0.5rem;
 }
 
@@ -151,26 +190,26 @@ nav a:active svg path {
     fill: var(--color-title);
 }
 
-nav a.disable,         nav a.disable:link,
+nav a.disable, nav a.disable:link,
 nav a.disable:visited, nav a.disable:hover,
-nav a.disable:focus,   nav a.disable:active {
+nav a.disable:focus, nav a.disable:active {
     color: var(--color-text);
     cursor: default;
     text-shadow: none;
     transform: none;
 }
 
-nav a.disable svg,         nav a.disable:link svg,
+nav a.disable svg, nav a.disable:link svg,
 nav a.disable:visited svg, nav a.disable:hover svg,
-nav a.disable:focus svg,   nav a.disable:active svg {
+nav a.disable:focus svg, nav a.disable:active svg {
     cursor: default;
     filter: none;
     margin-left: 0;
 }
 
-nav a.disable svg path,         nav a.disable:link svg path,
+nav a.disable svg path, nav a.disable:link svg path,
 nav a.disable:visited svg path, nav a.disable:hover svg path,
-nav a.disable:focus svg path,   nav a.disable:active svg path {
+nav a.disable:focus svg path, nav a.disable:active svg path {
     cursor: default;
     fill: var(--color-text);
 }
@@ -178,7 +217,7 @@ nav a.disable:focus svg path,   nav a.disable:active svg path {
 #nav_projects_list .bubble {
     background-color: var(--color-accent);
     border-radius: 0.6rem;
-    box-shadow: 0.1rem 0.1rem 0.1rem var(--color-shadow);
+    box-shadow: var(--shadow-link);
     color: var(--color-bg);
     display: inline-block;
     font-size: 0.8rem;
@@ -195,7 +234,7 @@ nav a.disable:focus svg path,   nav a.disable:active svg path {
 #nav_projects_list a:focus .bubble,
 #nav_projects_list a:active .bubble {
     background-color: var(--color-title);
-    box-shadow: 0 0 0.2rem var(--color-title);
+    box-shadow: var(--glow-text);
     color: var(--color-item);
     margin-left: 0.5rem;
     text-shadow: 0 0 0.1rem var(--color-item);
@@ -231,9 +270,9 @@ header {
 \* * * * * * * * */
 
 .github-icon {
-    filter: drop-shadow(0.15em 0.15em 0.15em var(--color-shadow));
+    filter: drop-shadow(var(--shadow-text));
     height: 2.3em;
-    transition: all 0.2s ease-out;
+    transition: var(--transition-all);
     width: 2.3em;
 }
 
@@ -241,15 +280,10 @@ header {
     fill: var(--color-accent);
 }
 
-.github-link:hover,
-.github-link:focus,
-.github-link:active {
-}
-
 .github-link:hover .github-icon,
 .github-link:focus .github-icon,
 .github-link:active .github-icon {
-    filter: drop-shadow(0 0 0.3em var(--color-title));
+    filter: drop-shadow(var(--glow-text));
     transform: rotate(360deg) scale(1.5);
 }
 
@@ -276,16 +310,118 @@ main table {
 }
 
 main table tr {
-    background-color: var(--color-item);
-    box-shadow: 0 0 1rem var(--color-shadow);
+    background: var(--color-item) var(--gradient-split);
+    box-shadow: var(--shadow-box);
 }
 
 main table tr td,
 main table tr th {
-    padding: 1em;
+    padding: 1em 0;
+    text-align: right;
 }
 
-main table tfoot tr td:last-child {
+main table tr td:first-child,
+main table tr th:first-child {
+    padding-left: 1em;
+    text-align: left;
+}
+
+main table tr td:nth-child(2),
+main table tr th:nth-child(2),
+main table tr td:nth-child(3),
+main table tr th:nth-child(3) {
+    text-align: left;
+}
+
+main table tr td:last-child,
+main table tr th:last-child {
+    padding-right: 1em;
+    white-space: nowrap;
+}
+
+main table svg {
+    filter: drop-shadow(var(--shadow-link));
+    transition: var(--transition-all);
+}
+
+main table svg path {
+    fill: var(--color-accent);
+    transition: var(--transition-all);
+}
+
+main table a:hover svg,
+main table a:focus svg,
+main table a:active svg {
+    filter: drop-shadow(var(--glow-text));
+    transform: scale(1.5);
+}
+
+main table a:hover svg path,
+main table a:focus svg path,
+main table a:active svg path {
+    fill: var(--color-title);
+}
+
+main table thead th {
+    font-weight: normal;
+}
+
+main table tbody tr:hover {
+    box-shadow: var(--glow-box);
+    outline: var(--border-solid);
+}
+
+main table tbody label {
+    cursor: pointer;
+    display: block;
+}
+
+main table tbody input[type='checkbox'] {
+    box-shadow: var(--shadow-text);
+    cursor: pointer;
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+main table tbody label {
+
+}
+
+main table tbody .incomplete {
+    background:  var(--color-item) var(--gradient-light);
+    color: var(--color-title);
+}
+
+main table tbody .complete {
+    background: var(--color-item) var(--gradient-dark);
+    text-decoration: line-through;
+}
+
+main table tbody .complete:hover {
+    text-decoration: none;
+}
+
+main table tbody a {
+    padding-left: 0.3rem;
+}
+
+main table tbody svg {
+    height: 1.8rem;
+    width: 1.8rem;
+}
+
+main table tfoot svg {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+main tfoot tr td:first-child {
+    padding: 0.6rem 0 0.2rem 0.7rem;
+    text-align: left;
+}
+
+main tfoot tr td:last-child {
+    padding: 0.6rem 0.7rem 0.2rem 0;
     text-align: right;
 }
 
@@ -298,4 +434,37 @@ footer {
     font-size: 0.8em;
     text-align: center;
     width: 100%;
+}
+
+/* * * * * * * * *\
+ *    Modals     *
+\* * * * * * * * */
+
+#modal > div {
+    background-color: var(--color-item);
+    box-shadow: var(--shadow-box);
+    padding: 2em;
+}
+
+#modal div h3 {
+    font-size: 1.4rem;
+    font-weight: normal;
+    margin: 0 0 1em;
+    text-align: center;
+}
+
+#modal .close_modal svg {
+    filter: drop-shadow(var(--shadow-link));
+}
+
+#modal .close_modal svg path {
+    fill: var(--color-accent);
+}
+
+#modal .close_modal:hover svg {
+    filter: drop-shadow(var(--glow-text));
+}
+
+#modal .close_modal:hover svg path {
+    fill: var(--color-title);
 }
