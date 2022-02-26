@@ -52,9 +52,36 @@
             </footer>
         </section>
         <div id="modal">
-            <div id="modal_test">
-                <h3>Test</h3>
-                <p>This is a test modal.</p>
+
+            <!-- ------------ -!>
+                  Settings
+            <--- ------------ -->
+            <div id="modal_settings">
+                <h3>Settings</h3>
+                <form>
+                    <label for="color-accent">Accent Color</label>
+                    <input type="color" id="color-accent" name="color-accent">
+                    <label for="color-scheme">Main Theme</label>
+                    <select id="color-scheme" name="color-scheme">
+                        <option value="dark">Dark Mode</option>
+                        <option value="light">Light Mode</option>
+                    </select>
+                    <button id="settings_reset" type="button">Reset</button>
+                    <button id="settings_save" type="button">Save</button>
+                </form>
+            </div>
+
+            <!-- ------------ -!>
+               Restore Defaults
+            <--- ------------ -->
+            <div id="modal_default">
+                <h3>Restore Defaults</h3>
+                <p>This will erase all user created data and restore the tasks and settings data to their original default values.</p>
+                <p>This action <strong>cannot</strong> be undone!</p>
+                <div>
+                    <button id="default_cancel" type="button">Cancel</button>
+                    <button id="default_confirm" type="button">Continue</button>
+                </div>
             </div>
         </div>
     </body>

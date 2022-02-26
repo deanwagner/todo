@@ -13,21 +13,45 @@
 \* * * * * * * * * * * */
 
 :root {
-    /* Default Colors */
+    /* Default/Light Colors */
+    --color-accent : #009999;
     --color-shadow : #080808;
-    --color-bg     : #333333;
-    --color-item   : #666666;
-    --color-text   : #cccccc;
-    --color-accent : #99ffff;
-    --color-title  : #fafafa;
+    --color-bg     : #fafafa;
+    --color-item   : #dddddd;
+    --color-text   : #666666;
+    --color-title  : #333333;
 
-    /* Shadow/Glow */
-    --shadow-text  : 0.05rem 0.05rem 0.2rem var(--color-shadow);
-    --shadow-title : 0.15rem 0.15rem 0.05rem var(--color-shadow);
-    --shadow-link  : 0.1rem 0.1rem 0.1rem var(--color-shadow);
-    --shadow-box   : 0 0 1rem var(--color-shadow);
-    --glow-text    : 0 0 0.2rem var(--color-title);
-    --glow-box     : 0 0 0.8rem var(--color-title);
+    /* Default/Light Shadows/Glow */
+    --shadow-body  : 0 0 1em rgba(0,0,0,0.3);
+    --shadow-text  : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
+    --shadow-title : 0.1rem 0.1rem 0.2rem rgba(0,0,0,0.3);
+    --shadow-link  : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
+    --shadow-box   : 0 0 0.3rem rgba(0,0,0,0.3);
+    --glow-text    : 0 0 0.1rem var(--color-title);
+    --glow-box     : 0 0 0.5rem var(--color-title);
+
+    /* Light Color Scheme */
+    color-scheme : light;
+
+    /* Dark Colors */
+    --dark-color-accent : #00ffff;
+    --dark-color-shadow : #080808;
+    --dark-color-bg     : #333333;
+    --dark-color-item   : #666666;
+    --dark-color-text   : #cccccc;
+    --dark-color-title  : #fafafa;
+
+    /* Dark Shadows/Glow */
+    --dark-shadow-body  : 0 0 1.5em rgba(0,0,0,0.8);
+    --dark-shadow-text  : 0.05rem 0.05rem 0.2rem var(--dark-color-shadow);
+    --dark-shadow-title : 0.15rem 0.15rem 0.05rem var(--dark-color-shadow);
+    --dark-shadow-link  : 0.1rem 0.1rem 0.1rem var(--dark-color-shadow);
+    --dark-shadow-box   : 0 0 1rem var(--dark-color-shadow);
+    --dark-glow-text    : 0 0 0.2rem var(--dark-color-title);
+    --dark-glow-box     : 0 0 0.8rem var(--dark-color-title);
+
+    /* Dark Color Scheme */
+    --dark-color-scheme : dark;
 
     /* Borders */
     --border-solid  : 1px solid var(--color-title);
@@ -38,15 +62,18 @@
     --font-input : 'Courier New', Courier, monospace;
 
     /* Transitions */
-    --transition-all : all 0.2s ease-out;
+    --transition-all   : none;
+    --transition-stop  : none;
+    --transition-start : all 0.2s ease-out;
 
     /* Gradients */
-    --gradient-light : linear-gradient(to bottom right, rgba(255,255,255,0.4), rgba(255,255,255,0));
-    --gradient-split : linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(0,0,0,0.3));
-    --gradient-dark  : linear-gradient(to bottom right, rgba(0,0,0,0), rgba(0,0,0,0.5));
+    --gradient-light : linear-gradient(to bottom right, rgba(255,255,255,0.5), rgba(0,0,0,0.1));
+    --gradient-split : linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(0,0,0,0.2));
+    --gradient-dark  : linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(0,0,0,0.4));
 
-    /* Browser Theme */
-    color-scheme: dark;
+    /* Media Query Flags */
+    --dark-mode   : 0;
+    --mobile-view : 0;
 }
 
 * {
@@ -67,6 +94,7 @@ html {
 body {
     align-items: flex-start;
     background-color: var(--color-bg);
+    box-shadow: inset var(--shadow-body);
     color: var(--color-text);
     display: flex;
     font-family: var(--font-base);
@@ -95,13 +123,107 @@ a:hover, a:focus, a:active {
     text-shadow: var(--glow-text);
 }
 
+a svg {
+    filter: drop-shadow(var(--shadow-link));
+    transition: var(--transition-all);
+}
+
+a svg * {
+    fill: var(--color-accent);
+    transition: var(--transition-all);
+}
+
+a:hover svg,
+a:focus svg,
+a:active svg {
+    filter: drop-shadow(var(--glow-text));
+    transform: scale(1.3);
+}
+
+a:hover svg *,
+a:focus svg *,
+a:active svg * {
+    fill: var(--color-title);
+}
+
+/* * * * * * * * *\
+ *     Forms     *
+\* * * * * * * * */
+
+input[type='checkbox'],
+button, select, option {
+    cursor: pointer;
+}
+
+input[type='text'],
+input[type='number'],
+input[type='date'] {
+    cursor: text;
+}
+
+input[type='text'],
+input[type='number'],
+input[type='date'],
+select {
+    background-color: var(--color-text);
+    border: var(--border-solid);
+    border-radius: 0.3em;
+    box-shadow: inset var(--shadow-text);
+    color: var(--color-bg);
+    font-family: 'Courier New', Courier, monospace;
+    padding: 0.3em;
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+input[type='date']:focus,
+select:focus {
+    outline: var(--outline-solid);
+}
+
+select option {
+    margin: 0.5em;
+    padding: 0.5em;
+}
+
+input[type='color'] {
+    background-color: var(--color-text);
+    border: var(--border-solid);
+    border-radius: 0.5em;
+    box-shadow: var(--shadow-text);
+    cursor: pointer;
+    padding: 0;
+}
+
+input[type='color']:hover {
+    background-color: var(--color-title);
+    box-shadow: var(--shadow-link);
+}
+
+button {
+    background-color: var(--color-text);
+    border: var(--border-solid);
+    border-radius: 0.3em;
+    box-shadow: var(--shadow-text);
+    color: var(--color-bg);
+    padding: 0.5em;
+    transition: var(--transition-all);
+}
+
+button:hover,
+button:focus,
+button:active {
+    background-color: var(--color-title);
+    box-shadow: var(--glow-box);
+}
+
 /* * * * * * * * *\
  *     Aside     *
 \* * * * * * * * */
 
 aside {
     background: var(--color-item) var(--gradient-split);
-    box-shadow: var(--shadow-box);
+    box-shadow: var(--shadow-body);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -148,46 +270,30 @@ nav #empty_space {
 nav a,
 nav a:link,
 nav a:visited {
-    color: var(--color-accent);
     display: block;
     font-size: 1.2em;
-    text-decoration: none;
     padding: 1em 0 0;
-    text-shadow: var(--shadow-link);
+}
+
+nav a:hover,
+nav a:focus,
+nav a:active {
+    text-decoration: none;
+    transform: scale(1.2);
 }
 
 nav a svg {
-    filter: drop-shadow(var(--shadow-link));
     margin-right: 0.5rem;
     height: 1.2em;
     vertical-align: bottom;
     width: 1.2em;
 }
 
-nav a svg path {
-    fill: var(--color-accent);
-}
-
-nav a:hover,
-nav a:focus,
-nav a:active {
-    color: var(--color-title);
-    text-decoration: none;
-    transform: scale(1.2);
-    text-shadow: var(--glow-text);
-}
-
 nav a:hover svg,
 nav a:focus svg,
 nav a:active svg {
-    filter: drop-shadow(var(--glow-text));
     margin-left: 0.5rem;
-}
-
-nav a:hover svg path,
-nav a:focus svg path,
-nav a:active svg path {
-    fill: var(--color-title);
+    transform: scale(1);
 }
 
 nav a.disable, nav a.disable:link,
@@ -212,6 +318,12 @@ nav a.disable:visited svg path, nav a.disable:hover svg path,
 nav a.disable:focus svg path, nav a.disable:active svg path {
     cursor: default;
     fill: var(--color-text);
+}
+
+nav a.disable span, nav a.disable:link span,
+nav a.disable:visited span, nav a.disable:hover span,
+nav a.disable:focus span, nav a.disable:active span {
+    cursor: default;
 }
 
 #nav_projects_list .bubble {
@@ -270,27 +382,14 @@ header {
 \* * * * * * * * */
 
 .github-icon {
-    filter: drop-shadow(var(--shadow-text));
     height: 2.3em;
-    transition: var(--transition-all);
     width: 2.3em;
-}
-
-.github-path {
-    fill: var(--color-accent);
 }
 
 .github-link:hover .github-icon,
 .github-link:focus .github-icon,
 .github-link:active .github-icon {
-    filter: drop-shadow(var(--glow-text));
     transform: rotate(360deg) scale(1.5);
-}
-
-.github-link:hover .github-path,
-.github-link:focus .github-path,
-.github-link:active .github-path {
-    fill: var(--color-title);
 }
 
 /* * * * * * * * *\
@@ -337,29 +436,6 @@ main table tr td:last-child,
 main table tr th:last-child {
     padding-right: 1em;
     white-space: nowrap;
-}
-
-main table svg {
-    filter: drop-shadow(var(--shadow-link));
-    transition: var(--transition-all);
-}
-
-main table svg path {
-    fill: var(--color-accent);
-    transition: var(--transition-all);
-}
-
-main table a:hover svg,
-main table a:focus svg,
-main table a:active svg {
-    filter: drop-shadow(var(--glow-text));
-    transform: scale(1.5);
-}
-
-main table a:hover svg path,
-main table a:focus svg path,
-main table a:active svg path {
-    fill: var(--color-title);
 }
 
 main table thead th {
@@ -453,18 +529,60 @@ footer {
     text-align: center;
 }
 
-#modal .close_modal svg {
-    filter: drop-shadow(var(--shadow-link));
+/* * * * * * * * *\
+ *   Settings    *
+\* * * * * * * * */
+
+#modal_settings form {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 1fr 1fr;
 }
 
-#modal .close_modal svg path {
-    fill: var(--color-accent);
+#modal_settings form input[type='color'] {
+    display: block;
+    width: 100%;
 }
 
-#modal .close_modal:hover svg {
-    filter: drop-shadow(var(--glow-text));
+/* * * * * * * * *\
+ *    History    *
+\* * * * * * * * */
+
+#modal_default p {
+    max-width: 40ch;
 }
 
-#modal .close_modal:hover svg path {
-    fill: var(--color-title);
+#modal_default p:nth-child(4) {
+    font-style: italic;
+    max-width: 40ch;
+    text-align: center;
+}
+
+#modal_default div {
+    align-items: stretch;
+    display: flex;
+    gap: 0.5em;
+    justify-content: stretch;
+}
+
+#modal_default button {
+    flex: 1;
+    padding: 0.5em 2em;
+    white-space: nowrap;
+}
+
+/* * * * * * * * *\
+ * Media Queries *
+\* * * * * * * * */
+
+@media screen and (max-width: 1200px) {
+
+}
+
+@media screen and (orientation: portrait) {
+    :root { --mobile-view: 1; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root { --dark-mode: 1; }
 }

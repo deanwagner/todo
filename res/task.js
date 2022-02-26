@@ -104,7 +104,16 @@ class Task {
      * Toggle Status
      */
     toggleStatus() {
-        this.status = (this.status) ? 0 : 1;
+        if (this.status) {
+            this.status   = 0;
+            this.complete = '';
+        } else {
+            const now = new Date();
+            this.status   = 1;
+            this.complete = now.getFullYear() + '-' +
+                ('0' + (now.getMonth()+1)).slice(-2) + '-' +
+                ('0' + now.getDate()).slice(-2);
+        }
     }
 
     /**
@@ -128,7 +137,7 @@ class Task {
      */
     static #formatDate(str) {
         if (str !== '') {
-            return new Date(str).toLocaleDateString();
+            return new Date(str + ' 12:00:00').toLocaleDateString();
         } else {
             return 'n/a';
         }

@@ -6,12 +6,21 @@ import Task  from './task.js';
 /**
  * Task List
  * @class
+ * @property {array}  list  - Array of Task Objects
+ * @property {object} thead - <thead>
+ * @property {object} tbody - <tbody>
+ * @property {object} tfoot - <tfoot>
+ * @property {array}  data  - temp data
+ * @author Dean Wagner <info@deanwagner.net>
  */
 class List {
 
     // Class Properties
-    list = [];
-    data = [{
+    list  = [];
+    thead = {};
+    tbody = {};
+    tfoot = {};
+    data  = [{
         id       : 'hgfhfgwsx',
         name     : 'Walk Dog',
         project  : '',
@@ -29,6 +38,33 @@ class List {
         complete : '2022-02-23',
         status   : 1,
         archive  : 0
+    }, {
+        id       : 'greahjtjk',
+        name     : 'Mow Yard',
+        project  : '',
+        due      : '',
+        created  : '2022-02-21',
+        complete : '',
+        status   : 0,
+        archive  : 0
+    }, {
+        id       : 'hgkkludgjz',
+        name     : 'Do Dishes',
+        project  : '',
+        due      : '',
+        created  : '2022-02-20',
+        complete : '',
+        status   : 0,
+        archive  : 0
+    }, {
+        id       : 'mjhuihgihavb',
+        name     : 'Cook Dinner',
+        project  : '',
+        due      : '',
+        created  : '2022-02-21',
+        complete : '',
+        status   : 0,
+        archive  : 0
     }];
 
     /**
@@ -36,6 +72,14 @@ class List {
      * @constructor
      */
     constructor() {
+
+        // Class Elements
+        this.thead = document.querySelector('main table thead');
+        this.tbody = document.querySelector('main table tbody');
+        this.tfoot = document.querySelector('main table tfoot');
+
+        /********************************************/
+
         this.data.forEach((task) => {
             this.list.push(new Task(
                 task.id,
@@ -48,10 +92,6 @@ class List {
                 task.archive,
             ));
         });
-
-        this.thead = document.querySelector('main table thead');
-        this.tbody = document.querySelector('main table tbody');
-        this.tfoot = document.querySelector('main table tfoot');
 
         const head = {
             select   : ' ',
@@ -70,6 +110,30 @@ class List {
         });
 
         this.tfoot.appendChild(this.tableFoot(7));
+
+        /********************************************/
+
+        /* * * * * * * * * * * *\
+         *   Event Listeners   *
+        \* * * * * * * * * * * */
+
+        // Task Checkboxes
+        const checkboxes = this.tbody.querySelectorAll("input[type='checkbox']");
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener('input', (e) => {
+                const taskID = checkboxes[i].id.replace('check_', '');
+                const index  = this.indexFromTaskID(taskID);
+                this.list[index].toggleStatus();
+                const row  = this.tbody.querySelector('#' + taskID);
+                const comp = row.querySelector('.task_complete');
+                comp.innerText = this.list[index].getComplete();
+                if (checkboxes[i].checked) {
+                    row.classList.replace('incomplete', 'complete');
+                } else {
+                    row.classList.replace('complete', 'incomplete');
+                }
+            });
+        }
     }
 
     /**
@@ -150,11 +214,27 @@ class List {
     }
 
     /**
+     * Get Task Index from Task ID
+     * @param   {string} id - Task ID
+     * @returns {number} - Task Index
+     */
+    indexFromTaskID(id) {
+        return this.list.findIndex(task => task.id === id);
+    }
+
+    /**
      * Generate Random Unique ID
      * @returns {string} - Unique ID
      */
     generateId() {
         return (Math.round(Date.now())).toString(36);
+    }
+
+    /**
+     * Purge All User Data
+     */
+    purge() {
+        //this.storage.removeItem('todo_list');
     }
 }
 
