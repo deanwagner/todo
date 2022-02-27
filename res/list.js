@@ -1,33 +1,37 @@
 "use strict";
 
 // Import Task Module
-import Task  from './task.js';
+import Task from './task.js';
 
 /**
  * Task List
  * @class
- * @property {array}  list    - Array of Task Objects
- * @property {object} thead   - <thead>
- * @property {object} tbody   - <tbody>
- * @property {object} tfoot   - <tfoot>
- * @property {object} modal   - Modal Object
- * @property {object} storage - LocalStorage
- * @property {array}  default - Default Task Data
+ * @property {array}  list     - Array of Task Objects
+ * @property {object} thead    - <thead>
+ * @property {object} tbody    - <tbody>
+ * @property {object} tfoot    - <tfoot>
+ * @property {object} modal    - Modal Object
+ * @property {object} storage  - LocalStorage
+ * @property {array}  projects - Task Projects
+ * @property {array}  default  - Default Task Data
  * @author Dean Wagner <info@deanwagner.net>
  */
 class List {
 
     // Class Properties
-    list    = [];
-    thead   = {};
-    tbody   = {};
-    tfoot   = {};
-    modal   = {};
-    storage = {}
+    list     = [];
+    thead    = {};
+    tbody    = {};
+    tfoot    = {};
+    modal    = {};
+    storage  = {};
+    projects = [];
+
+    // Default Tasks
     default = [{
         id       : 'hgfhfgwsx',
         name     : 'Walk Dog',
-        project  : '',
+        project  : 'Daily Chores',
         due      : '',
         created  : '2022-02-23',
         complete : '',
@@ -36,7 +40,7 @@ class List {
     }, {
         id       : 'jukurbdfr',
         name     : 'Make Bed',
-        project  : '',
+        project  : 'Daily Chores',
         due      : '',
         created  : '2022-02-22',
         complete : '2022-02-23',
@@ -45,7 +49,7 @@ class List {
     }, {
         id       : 'greahjtjk',
         name     : 'Mow Yard',
-        project  : '',
+        project  : 'Weekly Chores',
         due      : '',
         created  : '2022-02-21',
         complete : '',
@@ -53,8 +57,8 @@ class List {
         archive  : 0
     }, {
         id       : 'hgkkludgjz',
-        name     : 'Do Dishes',
-        project  : '',
+        name     : 'Empty Dishwasher',
+        project  : 'Daily Chores',
         due      : '',
         created  : '2022-02-20',
         complete : '',
@@ -62,8 +66,8 @@ class List {
         archive  : 0
     }, {
         id       : 'mjhuihgihavb',
-        name     : 'Cook Dinner',
-        project  : '',
+        name     : 'Plan Dinner',
+        project  : 'Daily Chores',
         due      : '',
         created  : '2022-02-21',
         complete : '',
@@ -128,6 +132,8 @@ class List {
                 } else {
                     row.classList.replace('complete', 'incomplete');
                 }
+                this.updateProjects();
+                this.updateStats();
             });
         }
 
@@ -277,6 +283,12 @@ class List {
             this.tbody.appendChild(this.tableRow(newTask));
         }
 
+        // Update Projects
+        this.updateProjects();
+
+        // Update Stats
+        this.updateStats();
+
         // Update Storage
         this.save();
     }
@@ -291,6 +303,12 @@ class List {
 
         // Remove Task from Table
         this.removeTableRow(taskID);
+
+        // Update Projects
+        this.updateProjects();
+
+        // Update Stats
+        this.updateStats();
 
         // Update Storage
         this.save();
@@ -310,6 +328,12 @@ class List {
         // Remove Task from Table
         this.removeTableRow(taskID);
 
+        // Update Projects
+        this.updateProjects();
+
+        // Update Stats
+        this.updateStats();
+
         // Update Storage
         this.save();
     }
@@ -328,6 +352,12 @@ class List {
         // Add Task to Table
         this.tbody.appendChild(this.tableRow(taskID));
 
+        // Update Projects
+        this.updateProjects();
+
+        // Update Stats
+        this.updateStats();
+
         // Update Storage
         this.save();
     }
@@ -338,13 +368,11 @@ class List {
     buildTable() {
 
         const head = {
-            select   : ' ',
             name     : 'Task',
             project  : 'Project',
             due      : 'Due By',
             created  : 'Created',
-            complete : 'Complete',
-            edit     : ' '
+            complete : 'Complete'
         };
 
         this.thead.innerHTML = '';
@@ -352,7 +380,10 @@ class List {
 
         this.thead.appendChild(this.tableHead(head));
         this.tableBody();
-        this.tfoot.appendChild(this.tableFoot(7));
+        this.tfoot.appendChild(this.tableFoot(5));
+
+        // Update Stats
+        this.updateStats();
     }
 
     /**
@@ -363,7 +394,10 @@ class List {
     tableHead(headings) {
 
         // Create Row Element
-        const row = document.createElement('tr');
+        const row   = document.createElement('tr');
+        const empty = document.createElement('th');
+        empty.innerHTML = ' ';
+        row.appendChild(empty);
 
         // Loop through Headings
         for (let index in headings) {
@@ -391,6 +425,11 @@ class List {
             row.appendChild(cell);
         }
 
+        // Create Task Button
+        const add = document.createElement('th');
+        add.innerHTML = '<a id="add_task" href="#"><svg viewBox="0 0 24 24"><path d="M19 19V8H5V19H19M16 1H18V3H19C20.11 3 21 3.9 21 5V19C21 20.11 20.11 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.89 3.89 3 5 3H6V1H8V3H16V1M11 9.5H13V12.5H16V14.5H13V17.5H11V14.5H8V12.5H11V9.5Z" /></svg></a>';
+        row.appendChild(add);
+
         // Return Table Row Element
         return row;
     }
@@ -398,14 +437,22 @@ class List {
     /**
      * Build Table Body
      */
-    tableBody() {
+    tableBody(archive = false) {
 
         // Clear Existing Data
         this.tbody.innerHTML = '';
 
         // Add Rows to Table
         this.list.forEach((task) => {
-            this.tbody.appendChild(this.tableRow(task));
+            if (archive) {
+                if (task.archive) {
+                    this.tbody.appendChild(this.tableRow(task));
+                }
+            } else {
+                if (!task.archive) {
+                    this.tbody.appendChild(this.tableRow(task));
+                }
+            }
         });
     }
 
@@ -433,29 +480,37 @@ class List {
             check = '';
         }
 
-        // Add Cells to Table Row
-        row.innerHTML = `
+        // Create HTML String
+        let html =  `
             <td class="task_check"><input type="checkbox" id="check_${task.id}"${check}></td>
             <td class="task_name"><label for="check_${task.id}">${task.getName()}</label></td>
             <td class="task_project">${task.getProject()}</td>
             <td class="task_due">${task.getDue()}</td>
             <td class="task_created">${task.getCreated()}</td>
             <td class="task_complete">${task.getComplete()}</td>
-            <td class="task_edit">
-                <a data-id="${task.id}" data-action="archive" title="Archive Task" href="#"><svg viewBox="0 0 24 24">
-                    <path d="M3,3H21V7H3V3M4,8H20V21H4V8M9.5,11A0.5,0.5 0 0,0 9,11.5V13H15V11.5A0.5,0.5 0 0,0 14.5,11H9.5Z" />
-                </svg></a><a data-id="${task.id}" data-action="delete" title="Delete Task" href="#"><svg viewBox="0 0 24 24">
+            <td class="task_edit">`;
+
+        if (task.archive) {
+            html += `<a data-id="${task.id}" data-action="restore" title="Restore Task" href="#"><svg viewBox="0 0 24 24"><path d="M12,3A9,9 0 0,0 3,12H0L4,16L8,12H5A7,7 0 0,1 12,5A7,7 0 0,1 19,12A7,7 0 0,1 12,19C10.5,19 9.09,18.5 7.94,17.7L6.5,19.14C8.04,20.3 9.94,21 12,21A9,9 0 0,0 21,12A9,9 0 0,0 12,3M14,12A2,2 0 0,0 12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12Z" /></svg></a>`;
+        } else {
+            html += `<a data-id="${task.id}" data-action="archive" title="Archive Task" href="#"><svg viewBox="0 0 24 24"><path d="M3,3H21V7H3V3M4,8H20V21H4V8M9.5,11A0.5,0.5 0 0,0 9,11.5V13H15V11.5A0.5,0.5 0 0,0 14.5,11H9.5Z" /></svg></a>`;
+        }
+
+        html += `<a data-id="${task.id}" data-action="delete" title="Delete Task" href="#"><svg viewBox="0 0 24 24">
                     <path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M9,8H11V17H9V8M13,8H15V17H13V8Z" />
                 </svg></a><a data-id="${task.id}" data-action="edit" title="Edit Task" href="#"><svg viewBox="0 0 24 24">
                     <path d="M5,3C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19H5V5H12V3H5M17.78,4C17.61,4 17.43,4.07 17.3,4.2L16.08,5.41L18.58,7.91L19.8,6.7C20.06,6.44 20.06,6 19.8,5.75L18.25,4.2C18.12,4.07 17.95,4 17.78,4M15.37,6.12L8,13.5V16H10.5L17.87,8.62L15.37,6.12Z" />
                 </svg></a>
-            </td>
-        `;
+            </td>`;
+
+        // Add Cells to Table Row
+        row.innerHTML = html;
 
         // Add Event Listeners for Edit Buttons
         const a = row.querySelectorAll('.task_edit a');
         for (let i = 0; i < a.length; i++) {
             a[i].addEventListener('click', (e) => {
+                e.preventDefault();
                 this.editEntry(e);
             });
         }
@@ -478,20 +533,68 @@ class List {
      * @returns {object} - Table Row Element
      */
     tableFoot(columns) {
-        const first   = 1;
-        const last    = columns - 1;
-        const row     = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="${first}">
-            
-            </td>
-            <td colspan="${last}">
-                <a id="add_task" href="#"><svg viewBox="0 0 24 24">
-                    <path d="M19 19V8H5V19H19M16 1H18V3H19C20.11 3 21 3.9 21 5V19C21 20.11 20.11 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.89 3.89 3 5 3H6V1H8V3H16V1M11 9.5H13V12.5H16V14.5H13V17.5H11V14.5H8V12.5H11V9.5Z" />
-                </svg></a>
-            </td>
-        `;
+        const col = columns + 2;
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="${col}"><div id="task_stats"></div></td>`;
         return row;
+    }
+
+    /**
+     * Update All Project Data
+     */
+    updateProjects() {
+
+        const projNav = document.getElementById('nav_projects_list');
+        const projNew = document.getElementById('new_project');
+
+        projNav.innerHTML = '';
+        projNew.innerHTML = '<option value="">none</option>';
+
+        this.projects.forEach((proj) => {
+            const todo  = this.list.filter(task => ((task.project === proj) && (!task.status) && (!task.archive))).length;
+            const total = this.list.filter(task => ((task.project === proj) && (!task.archive))).length;
+            if (total) {
+                projNav.innerHTML += `<a href="#"><span class="bubble">${todo}</span><span class="label">${proj}</span></a>`;
+                projNew.innerHTML += `<option>${proj}</option>`;
+            } else {
+                //TODO: remove project from array
+            }
+        });
+
+        const none = this.list.filter(task => ((task.project === '') && (!task.status) && (!task.archive))).length;
+        projNav.innerHTML += `<a href="#"><span class="bubble">${none}</span><span class="label">Rogue Tasks</span></a>`;
+        projNew.innerHTML += '<option value="__new__">New Project</option>';
+    }
+
+    /**
+     * Update <tfoot> Stats
+     */
+    updateStats() {
+        let incomplete = 0;
+        let complete   = 0;
+        let archived   = 0;
+        let total      = 0;
+        const projects = this.projects.length;
+
+        this.list.forEach((task) => {
+            if (task.archive) {
+                archived++;
+            } else {
+                total++;
+                if (task.complete) {
+                    complete++;
+                } else {
+                    incomplete++;
+                }
+            }
+        });
+
+        document.getElementById('task_stats').innerHTML = `
+            <div>Total:      <span>${total}</span></div>
+            <div>Incomplete: <span>${incomplete}</span></div>
+            <div>Complete:   <span>${complete}</span></div>
+            <div>Archived:   <span>${archived}</span></div>
+            <div>Projects:   <span>${projects}</span></div>`;
     }
 
     /**
@@ -512,7 +615,15 @@ class List {
                 json[i].status,
                 json[i].archive
             );
+
+            // Add Project
+            if ((!this.projects.includes(json[i].project)) && (!parseInt(json[i].archive))) {
+                this.projects.push(json[i].project);
+            }
         }
+
+        // Update Projects
+        this.updateProjects();
 
         // Add Books to Table
         this.buildTable();
