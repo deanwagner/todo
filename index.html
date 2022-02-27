@@ -54,6 +54,29 @@
         <div id="modal">
 
             <!-- ------------ -!>
+                Add/Edit Task
+            <--- ------------ -->
+            <div id="modal_edit">
+                <h3>Add New Book</h3>
+                <form id="new_task">
+                    <label for="new_name">Task</label>
+                    <input type="text" id="new_name" name="new_name" required>
+                    <label for="new_project">Project</label>
+                    <select id="new_project" name="new_project">
+                        <option value="">none</option>
+                        <option>Some Project</option>
+                        <option value="__new__">New Project</option>
+                    </select>
+                    <label for="new_add">New Project</label>
+                    <input type="text" id="new_add" name="new_add">
+                    <label for="new_due">Due Date</label>
+                    <input type="datetime-local" id="new_due" name="new_due">
+                    <button type="submit">Add Task</button>
+                    <input type="hidden" id="new_id" name="new_id" value="">
+                </form>
+            </div>
+
+            <!-- ------------ -!>
                   Settings
             <--- ------------ -->
             <div id="modal_settings">

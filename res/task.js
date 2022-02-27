@@ -137,7 +137,10 @@ class Task {
      */
     static #formatDate(str) {
         if (str !== '') {
-            return new Date(str + ' 12:00:00').toLocaleDateString();
+            if (str.length < 11) {
+                str = str + ' 12:00:00';
+            }
+            return new Date(str).toLocaleDateString();
         } else {
             return 'n/a';
         }

@@ -6,21 +6,25 @@ import Task  from './task.js';
 /**
  * Task List
  * @class
- * @property {array}  list  - Array of Task Objects
- * @property {object} thead - <thead>
- * @property {object} tbody - <tbody>
- * @property {object} tfoot - <tfoot>
- * @property {array}  data  - temp data
+ * @property {array}  list    - Array of Task Objects
+ * @property {object} thead   - <thead>
+ * @property {object} tbody   - <tbody>
+ * @property {object} tfoot   - <tfoot>
+ * @property {object} modal   - Modal Object
+ * @property {object} storage - LocalStorage
+ * @property {array}  default - Default Task Data
  * @author Dean Wagner <info@deanwagner.net>
  */
 class List {
 
     // Class Properties
-    list  = [];
-    thead = {};
-    tbody = {};
-    tfoot = {};
-    data  = [{
+    list    = [];
+    thead   = {};
+    tbody   = {};
+    tfoot   = {};
+    modal   = {};
+    storage = {}
+    default = [{
         id       : 'hgfhfgwsx',
         name     : 'Walk Dog',
         project  : '',
@@ -70,57 +74,49 @@ class List {
     /**
      * Constructor
      * @constructor
+     * @param {object} modal - Modal Object
      */
-    constructor() {
+    constructor(modal) {
 
-        // Class Elements
-        this.thead = document.querySelector('main table thead');
-        this.tbody = document.querySelector('main table tbody');
-        this.tfoot = document.querySelector('main table tfoot');
+        // Class Properties
+        this.modal   = modal;
+        this.storage = window.localStorage;
+        this.thead   = document.querySelector('main table thead');
+        this.tbody   = document.querySelector('main table tbody');
+        this.tfoot   = document.querySelector('main table tfoot');
 
-        /********************************************/
-
-        this.data.forEach((task) => {
-            this.list.push(new Task(
-                task.id,
-                task.name,
-                task.project,
-                task.due,
-                task.created,
-                task.complete,
-                task.status,
-                task.archive,
-            ));
-        });
-
-        const head = {
-            select   : ' ',
-            name     : 'Task',
-            project  : 'Project',
-            due      : 'Due By',
-            created  : 'Created',
-            complete : 'Complete',
-            edit     : ' '
-        };
-
-        this.thead.appendChild(this.tableHead(head));
-
-        this.list.forEach((task) => {
-            this.tbody.appendChild(this.tableRow(task));
-        });
-
-        this.tfoot.appendChild(this.tableFoot(7));
-
-        /********************************************/
+        // Load Tasks
+        if (this.storage.hasOwnProperty('todo_list')) {
+            // Load from LocalStorage
+            this.loadTasks(JSON.parse(this.storage.getItem('todo_list')));
+        } else {
+            // Load Default Tasks
+            this.defaultTasks();
+        }
 
         /* * * * * * * * * * * *\
          *   Event Listeners   *
         \* * * * * * * * * * * */
 
+        // Open Add Task Modal
+        document.getElementById('add_task').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.clearForm();
+            this.modal.open('modal_edit');
+        });
+
+        // Add Task Form Submit
+        document.getElementById('new_task').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.addTask();
+            this.modal.close('modal_edit');
+            return false;
+        });
+
         // Task Checkboxes
         const checkboxes = this.tbody.querySelectorAll("input[type='checkbox']");
         for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].addEventListener('input', (e) => {
+            checkboxes[i].addEventListener('input', () => {
                 const taskID = checkboxes[i].id.replace('check_', '');
                 const index  = this.indexFromTaskID(taskID);
                 this.list[index].toggleStatus();
@@ -134,6 +130,229 @@ class List {
                 }
             });
         }
+
+        // Table Header Sort Links
+        const tableHeaders = document.querySelectorAll('th a');
+        for (let i = 0; i < tableHeaders.length; i++) {
+            tableHeaders[i].addEventListener('click', (e) => {
+                e.preventDefault();
+                const prop = e.target.id.replace('head_', '');
+                this.sortList(e, prop);
+            });
+        }
+
+        // New Project
+        document.getElementById('new_project').addEventListener('input', (e) => {
+            if (e.currentTarget.value === '__new__') {
+                document.getElementById('new_add').style.display = 'block';
+                document.querySelector("label[for='new_add']").style.display = 'block';
+            } else {
+                document.getElementById('new_add').style.display = 'none';
+                document.querySelector("label[for='new_add']").style.display = 'none';
+            }
+        });
+    }
+
+    /**
+     * Sort Table by Heading
+     * @param {object} e    - Event Object
+     * @param {string} prop - Property to Sort By
+     */
+    sortList(e, prop) {
+        // Sort Library
+        this.list.sort((a, b) => (a[prop].toString().toLowerCase() > b[prop].toString().toLowerCase()) ? 1 : -1);
+
+        // Toggle Ascending/Descending
+        const link = e.target;
+        if (link.classList.contains('asc')) {
+            // From Ascending to Descending
+            link.classList.remove('asc');
+            link.classList.add('dec');
+            this.list.reverse();
+        } else if (link.classList.contains('dec')) {
+            // From Descending to Ascending
+            link.classList.remove('dec');
+            link.classList.add('asc');
+        } else {
+            // From No Sort to Ascending
+            const links = document.querySelectorAll('th a');
+            for (let i = 0; i < links.length; i++) {
+                links[i].classList.remove(...links[i].classList);
+            }
+            link.classList.add('asc');
+        }
+
+        // Rebuild Table
+        this.tableBody();
+    }
+
+    /**
+     * Delete, Archive, Restore, or Edit Task
+     * @param {object} e - Event Object
+     */
+    editEntry(e) {
+        e.preventDefault();
+
+        // Get Data from Element
+        const taskID = e.currentTarget.dataset.id;
+        const action = e.currentTarget.dataset.action;
+
+        // Handle Action
+        switch (true) {
+            case (action === 'delete'):
+                this.deleteTask(taskID);
+                break;
+            case (action === 'archive'):
+                this.archiveTask(taskID);
+                break;
+            case (action === 'restore'):
+                this.restoreTask(taskID);
+                break;
+            default:
+                this.loadForm(taskID);
+                this.modal.open('modal_edit');
+        }
+    }
+
+    /**
+     * Add New or Edit Existing Task
+     */
+    addTask() {
+        // Get Task ID from Hidden Form Value
+        const taskID = document.getElementById('new_id').value;
+
+        // Check for Task ID
+        if (taskID !== '') {
+
+            /* * * * * * * * * * * *\
+             * Edit Existing Task  *
+            \* * * * * * * * * * * */
+
+            // Get Task Index from Task ID
+            const index = this.indexFromTaskID(taskID);
+
+            // Update Library from Form
+            const proj = document.getElementById('new_project').value;
+            const name = document.getElementById('new_add').value;
+            this.list[index].project = ((proj === '__new__') && (name !== '')) ? name : proj;
+            this.list[index].name    = document.getElementById('new_name').value;
+            this.list[index].due     = document.getElementById('new_due').value;
+
+            // Update Table from Library
+            const row = document.getElementById(taskID);
+            row.querySelector('.task_name').innerText    = this.list[index].getName();
+            row.querySelector('.task_project').innerText = this.list[index].getProject();
+            row.querySelector('.task_due').innerText     = this.list[index].getDue();
+
+        } else {
+
+            /* * * * * * * * * * * *\
+             *    Add New Task     *
+            \* * * * * * * * * * * */
+
+            const proj    = document.getElementById('new_project').value;
+            const name    = document.getElementById('new_add').value;
+            const project = ((proj === '__new__') && (name !== '')) ? name : proj;
+            const now     = new Date();
+            const created = now.getFullYear() + '-' +
+                ('0' + (now.getMonth()+1)).slice(-2) + '-' +
+                ('0' + now.getDate()).slice(-2);
+
+            // Create New Task from Form
+            const newTask = new Task(
+                this.generateId(),
+                document.getElementById('new_name').value,
+                project,
+                document.getElementById('new_due').value,
+                created,
+                '',
+                '0',
+                '0'
+            );
+
+            // Add Book to Library
+            this.list.push(newTask);
+
+            // Add Book to Table
+            this.tbody.appendChild(this.tableRow(newTask));
+        }
+
+        // Update Storage
+        this.save();
+    }
+
+    /**
+     * Delete Task
+     * @param {string} taskID - Task ID
+     */
+    deleteTask(taskID) {
+        // Delete Task
+        this.list = this.list.filter(task => task.id !== taskID);
+
+        // Remove Task from Table
+        this.removeTableRow(taskID);
+
+        // Update Storage
+        this.save();
+    }
+
+    /**
+     * Archive Task
+     * @param {string} taskID - Task ID
+     */
+    archiveTask(taskID) {
+        // Get List Index from Task ID
+        const index = this.indexFromTaskID(taskID);
+
+        // Archive Task
+        this.list[index].archiveTask();
+
+        // Remove Task from Table
+        this.removeTableRow(taskID);
+
+        // Update Storage
+        this.save();
+    }
+
+    /**
+     * Restore Task
+     * @param {string} taskID - Task ID
+     */
+    restoreTask(taskID) {
+        // Get List Index from Task ID
+        const index = this.indexFromTaskID(taskID);
+
+        // Restore Task
+        this.list[index].restoreTask();
+
+        // Add Task to Table
+        this.tbody.appendChild(this.tableRow(taskID));
+
+        // Update Storage
+        this.save();
+    }
+
+    /**
+     * Build Table
+     */
+    buildTable() {
+
+        const head = {
+            select   : ' ',
+            name     : 'Task',
+            project  : 'Project',
+            due      : 'Due By',
+            created  : 'Created',
+            complete : 'Complete',
+            edit     : ' '
+        };
+
+        this.thead.innerHTML = '';
+        this.tfoot.innerHTML = '';
+
+        this.thead.appendChild(this.tableHead(head));
+        this.tableBody();
+        this.tfoot.appendChild(this.tableFoot(7));
     }
 
     /**
@@ -142,17 +361,52 @@ class List {
      * @returns {object} - Table Row Element
      */
     tableHead(headings) {
+
+        // Create Row Element
         const row = document.createElement('tr');
+
+        // Loop through Headings
         for (let index in headings) {
+
+            // Create Cell Element
             const cell = document.createElement('th');
-            const link = document.createElement('a');
-            link.setAttribute('id', 'head_' + index);
-            link.setAttribute('href', '#');
-            link.innerText = headings[index];
-            cell.appendChild(link);
+
+            // Check for Empty Data
+            if ((headings[index] !== ' ') || (headings[index] !== '')) {
+
+                // Create Link Element
+                const link = document.createElement('a');
+                link.setAttribute('id', 'head_' + index);
+                link.setAttribute('href', '#');
+                link.innerText = headings[index];
+
+                // Insert into Cell
+                cell.appendChild(link);
+            } else {
+                // Empty String
+                cell.innerText = headings[index];
+            }
+
+            // Add Cell to Row
             row.appendChild(cell);
         }
+
+        // Return Table Row Element
         return row;
+    }
+
+    /**
+     * Build Table Body
+     */
+    tableBody() {
+
+        // Clear Existing Data
+        this.tbody.innerHTML = '';
+
+        // Add Rows to Table
+        this.list.forEach((task) => {
+            this.tbody.appendChild(this.tableRow(task));
+        });
     }
 
     /**
@@ -161,16 +415,25 @@ class List {
      * @returns {object} - Table Row Element
      */
     tableRow(task) {
+
+        // Checked/Unchecked
         let check;
+
+        // Create Table Row Element
         const row = document.createElement('tr');
         row.setAttribute('id', task.id);
+
         if(task.status) {
+            // Task Complete
             row.classList.add('complete');
             check = ' checked';
         } else {
+            // Task Incomplete
             row.classList.add('incomplete');
             check = '';
         }
+
+        // Add Cells to Table Row
         row.innerHTML = `
             <td class="task_check"><input type="checkbox" id="check_${task.id}"${check}></td>
             <td class="task_name"><label for="check_${task.id}">${task.getName()}</label></td>
@@ -188,7 +451,25 @@ class List {
                 </svg></a>
             </td>
         `;
+
+        // Add Event Listeners for Edit Buttons
+        const a = row.querySelectorAll('.task_edit a');
+        for (let i = 0; i < a.length; i++) {
+            a[i].addEventListener('click', (e) => {
+                this.editEntry(e);
+            });
+        }
+
+        // Return Table Row Element
         return row;
+    }
+
+    /**
+     * Remove Task from Table
+     * @param {string} taskID - Task ID
+     */
+    removeTableRow(taskID) {
+        document.getElementById(taskID).remove();
     }
 
     /**
@@ -205,12 +486,74 @@ class List {
             
             </td>
             <td colspan="${last}">
-                <a href="#"><svg viewBox="0 0 24 24">
+                <a id="add_task" href="#"><svg viewBox="0 0 24 24">
                     <path d="M19 19V8H5V19H19M16 1H18V3H19C20.11 3 21 3.9 21 5V19C21 20.11 20.11 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.89 3.89 3 5 3H6V1H8V3H16V1M11 9.5H13V12.5H16V14.5H13V17.5H11V14.5H8V12.5H11V9.5Z" />
                 </svg></a>
             </td>
         `;
         return row;
+    }
+
+    /**
+     * Load Tasks into List from JSON
+     * @param {array} json - Parsed JSON Array of Tasks
+     */
+    loadTasks(json) {
+        // Loop through JSON
+        for (let i = 0; i < json.length; i++) {
+            // Add Task to List
+            this.list[i] = new Task(
+                json[i].id,
+                json[i].name,
+                json[i].project,
+                json[i].due,
+                json[i].created,
+                json[i].complete,
+                json[i].status,
+                json[i].archive
+            );
+        }
+
+        // Add Books to Table
+        this.buildTable();
+    }
+
+    /**
+     * Loads Default Tasks
+     */
+    defaultTasks() {
+        this.loadTasks(this.default);
+    }
+
+    /**
+     * Load Form to Edit Task
+     * @param {string} taskID - Task ID
+     */
+    loadForm(taskID) {
+        // Get List Index from Task ID
+        const index = this.indexFromTaskID(taskID);
+
+        // Populate Form with Existing Values
+        document.querySelector('#modal_edit h3').innerText   = 'Edit Task';
+        document.querySelector('#new_task button').innerText = 'Update Task';
+        document.getElementById('new_name').value    = this.list[index].name;
+        document.getElementById('new_project').value = this.list[index].project;
+        document.getElementById('new_add').value     = '';
+        document.getElementById('new_due').value     = this.list[index].due;
+        document.getElementById('new_id').value      = this.list[index].id;
+    }
+
+    /**
+     * Clear Form for New Task
+     */
+    clearForm() {
+        document.querySelector('#modal_edit h3').innerText = 'Add New Task';
+        document.querySelector('#new_task button').innerText = 'Add Task';
+        document.getElementById('new_name').value = '';
+        document.getElementById('new_project').value = '';
+        document.getElementById('new_add').value = '';
+        document.getElementById('new_due').value = '';
+        document.getElementById('new_id').value = '';
     }
 
     /**
@@ -234,7 +577,14 @@ class List {
      * Purge All User Data
      */
     purge() {
-        //this.storage.removeItem('todo_list');
+        this.storage.removeItem('todo_list');
+    }
+
+    /**
+     * Save All User Data
+     */
+    save() {
+        this.storage.setItem('todo_list', JSON.stringify(this.list));
     }
 }
 
