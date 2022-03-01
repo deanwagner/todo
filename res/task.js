@@ -6,9 +6,9 @@
  * @property {string} id
  * @property {string} name
  * @property {string} project
- * @property {string} due;
- * @property {string} created
- * @property {string} complete
+ * @property {number} due;
+ * @property {number} created
+ * @property {number} complete
  * @property {number} status
  * @property {number} archive
  * @author Dean Wagner <info@deanwagner.net>
@@ -41,9 +41,9 @@ class Task {
         this.id       = id;
         this.name     = name;
         this.project  = project;
-        this.due      = due;
-        this.created  = created;
-        this.complete = complete;
+        this.due      = parseInt(due);
+        this.created  = parseInt(created);
+        this.complete = parseInt(complete);
         this.status   = parseInt(status);
         this.archive  = parseInt(archive);
     }
@@ -106,13 +106,10 @@ class Task {
     toggleStatus() {
         if (this.status) {
             this.status   = 0;
-            this.complete = '';
+            this.complete = 0;
         } else {
-            const now = new Date();
             this.status   = 1;
-            this.complete = now.getFullYear() + '-' +
-                ('0' + (now.getMonth()+1)).slice(-2) + '-' +
-                ('0' + now.getDate()).slice(-2);
+            this.complete = Date.now();
         }
     }
 
@@ -132,15 +129,12 @@ class Task {
 
     /**
      * Format Date to Local String
-     * @param   {string} str - Raw Date
+     * @param   {number} time - Raw Date
      * @returns {string} - Formatted Date
      */
-    static #formatDate(str) {
-        if (str !== '') {
-            if (str.length < 11) {
-                str = str + ' 12:00:00';
-            }
-            return new Date(str).toLocaleDateString();
+    static #formatDate(time) {
+        if (time) {
+            return new Date(time).toLocaleDateString();
         } else {
             return 'n/a';
         }

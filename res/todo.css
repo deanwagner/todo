@@ -360,6 +360,19 @@ nav a.disable:focus span, nav a.disable:active span {
     text-shadow: 0 0 0.1rem var(--color-item);
 }
 
+#nav_projects_list a.disable .bubble,
+#nav_projects_list a.disable:link .bubble,
+#nav_projects_list a.disable:visited .bubble,
+#nav_projects_list a.disable:hover .bubble,
+#nav_projects_list a.disable:focus .bubble,
+#nav_projects_list a.disable:active .bubble {
+    background-color: var(--color-text);
+    box-shadow: none;
+    color: var(--color-item);
+    margin-left: 0;
+    text-shadow: none;
+}
+
 /* * * * * * * * *\
  *    Section    *
 \* * * * * * * * */

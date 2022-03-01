@@ -30,6 +30,74 @@ class ToDo {
         this.modal = new Modal();
         this.list  = new List(this.modal);
 
+        // Class Elements
+        this.title = document.querySelector('h2');
+
+        // All Tasks Link
+        document.getElementById('nav_all').addEventListener('click', (e) => {
+            e.preventDefault();
+            const last = document.getElementsByClassName('disable')[0];
+            last.classList.remove('disable');
+            e.currentTarget.classList.add('disable');
+            this.title.innerText = 'All Tasks';
+            this.list.buildTable();
+        });
+
+        // Today Link
+        document.getElementById('nav_today').addEventListener('click', (e) => {
+            e.preventDefault();
+            const last = document.getElementsByClassName('disable')[0];
+            last.classList.remove('disable');
+            e.currentTarget.classList.add('disable');
+            this.title.innerText = 'Today';
+            this.list.buildTable('today');
+        });
+
+        // Upcoming Link
+        document.getElementById('nav_upcoming').addEventListener('click', (e) => {
+            e.preventDefault();
+            const last = document.getElementsByClassName('disable')[0];
+            last.classList.remove('disable');
+            e.currentTarget.classList.add('disable');
+            this.title.innerText = 'Upcoming';
+            this.list.buildTable('upcoming');
+        });
+
+        // Overdue Link
+        document.getElementById('nav_overdue').addEventListener('click', (e) => {
+            e.preventDefault();
+            const last = document.getElementsByClassName('disable')[0];
+            last.classList.remove('disable');
+            e.currentTarget.classList.add('disable');
+            this.title.innerText = 'Overdue';
+            this.list.buildTable('overdue');
+        });
+
+        // Project Links
+        const projects = document.querySelectorAll('#nav_projects_list a');
+        projects.forEach((proj) => {
+            proj.addEventListener('click', (e) => {
+                e.preventDefault();
+                const link = e.currentTarget;
+                const name = link.getElementsByClassName('label')[0].textContent;
+                const last = document.getElementsByClassName('disable')[0];
+                last.classList.remove('disable');
+                link.classList.add('disable');
+                this.title.innerText = name;
+                this.list.buildTable(name);
+            });
+        });
+
+        // Archive Link
+        document.getElementById('nav_archive').addEventListener('click', (e) => {
+            e.preventDefault();
+            const last = document.getElementsByClassName('disable')[0];
+            last.classList.remove('disable');
+            e.currentTarget.classList.add('disable');
+            this.title.innerText = 'Archive';
+            this.list.buildTable('archive');
+        });
+
         // Settings Button
         document.getElementById('nav_settings').addEventListener('click', (e) => {
             e.preventDefault();
@@ -49,19 +117,19 @@ class ToDo {
             this.theme.resetSettings();
         });
 
-        // Open History Modal
+        // Open Restore Modal
         document.getElementById('nav_restore').addEventListener('click', (e) => {
             e.preventDefault();
             this.modal.open('modal_default');
         });
 
-        // History Cancel Button
+        // Restore Cancel Button
         document.getElementById('default_cancel').addEventListener('click', (e) => {
             e.preventDefault();
             this.modal.close('modal_default');
         });
 
-        // History Confirm Button
+        // Restore Confirm Button
         document.getElementById('default_confirm').addEventListener('click', (e) => {
             e.preventDefault();
             this.theme.purge();
