@@ -264,14 +264,10 @@ class List {
         // Build Table
         this.buildTable();
 
-        /* * * * * * * * * * * *\
-         *   Event Listeners   *
-        \* * * * * * * * * * * */
-
         // Add Task Form Submit
         document.getElementById('new_task').addEventListener('submit', (e) => {
             e.preventDefault();
-            this.addTask();
+            this.taskAdd();
             this.modal.close('modal_edit');
             return false;
         });
@@ -280,228 +276,14 @@ class List {
         document.getElementById('new_project').addEventListener('input', (e) => {
             if (e.currentTarget.value === '__new__') {
                 document.getElementById('new_add').style.display = 'block';
+                document.getElementById('new_add').required = true;
                 document.querySelector("label[for='new_add']").style.display = 'block';
             } else {
                 document.getElementById('new_add').style.display = 'none';
+                document.getElementById('new_add').required = false;
                 document.querySelector("label[for='new_add']").style.display = 'none';
             }
         });
-    }
-
-    /**
-     * Delete, Archive, Restore, or Edit Task
-     * @param {object} e - Event Object
-     */
-    editEntry(e) {
-        e.preventDefault();
-
-        // Get Data from Element
-        const taskID = e.currentTarget.dataset.id;
-        const action = e.currentTarget.dataset.action;
-
-        // Handle Action
-        switch (action) {
-            case 'delete':
-                this.deleteTask(taskID);
-                break;
-            case 'archive':
-                this.archiveTask(taskID);
-                break;
-            case 'restore':
-                this.restoreTask(taskID);
-                break;
-            default:
-                this.loadForm(taskID);
-                this.modal.open('modal_edit');
-        }
-    }
-
-    /**
-     * Add Event Listeners for Edit Buttons
-     * @param {object} container - Container Element
-     */
-    editButtons(container = null) {
-        if (container === null) {
-            container = document.querySelector('main table');
-        }
-
-        // Task Edit Buttons
-        const a = container.querySelectorAll('.task_edit a');
-        for (let i = 0; i < a.length; i++) {
-            a[i].addEventListener('click', (e) => {
-                e.preventDefault();
-                this.editEntry(e);
-            });
-        }
-
-        // Task Checkboxes
-        const checkboxes = container.querySelectorAll("input[type='checkbox']");
-        for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].addEventListener('input', () => {
-                const taskID = checkboxes[i].id.replace('check_', '');
-                const index  = this.indexFromTaskID(taskID);
-                this.list[index].toggleStatus();
-                const row  = document.getElementById(taskID);
-                const comp = row.querySelector('.task_complete');
-                comp.innerText = this.list[index].getComplete();
-                if (checkboxes[i].checked) {
-                    row.classList.replace('incomplete', 'complete');
-                } else {
-                    row.classList.replace('complete', 'incomplete');
-                }
-                this.updateProjects();
-                this.updateStats();
-            });
-        }
-
-        // Add Task Button
-        document.getElementById('add_task').addEventListener('click', (e) => {
-            e.preventDefault();
-            this.clearForm();
-            this.modal.open('modal_edit');
-        });
-    }
-
-    /**
-     * Add New or Edit Existing Task
-     */
-    addTask() {
-        // Get Task ID from Hidden Form Value
-        const taskID = document.getElementById('new_id').value;
-
-        // Check for Task ID
-        if (taskID !== '') {
-
-            /* * * * * * * * * * * *\
-             * Edit Existing Task  *
-            \* * * * * * * * * * * */
-
-            // Get Task Index from Task ID
-            const index = this.indexFromTaskID(taskID);
-
-            // Update Library from Form
-            const proj = document.getElementById('new_project').value;
-            const name = document.getElementById('new_add').value;
-            this.list[index].project = ((proj === '__new__') && (name !== '')) ? name : proj;
-            this.list[index].name    = document.getElementById('new_name').value;
-            this.list[index].due     = document.getElementById('new_due').valueAsNumber;
-
-            // Update Table from Library
-            const row = document.getElementById(taskID);
-            row.querySelector('.task_name').innerText    = this.list[index].getName();
-            row.querySelector('.task_project').innerText = this.list[index].getProject();
-            row.querySelector('.task_due').innerText     = this.list[index].getDue();
-
-        } else {
-
-            /* * * * * * * * * * * *\
-             *    Add New Task     *
-            \* * * * * * * * * * * */
-
-            const proj    = document.getElementById('new_project').value;
-            const name    = document.getElementById('new_add').value;
-            const project = ((proj === '__new__') && (name !== '')) ? name : proj;
-            const created = Date.now();
-
-            // Create New Task from Form
-            const newTask = new Task(
-                this.generateId(),
-                document.getElementById('new_name').value,
-                project,
-                document.getElementById('new_due').valueAsNumber.toString(),
-                created.toString(),
-                '0',
-                '0',
-                '0'
-            );
-
-            // Add Task to List
-            this.list.push(newTask);
-
-            // Add Task to Table
-            this.table.addTask(newTask);
-
-            const newRow = document.getElementById(newTask.id);
-            this.editButtons(newRow);
-        }
-
-        // Update Projects
-        this.updateProjects();
-
-        // Update Stats
-        this.updateStats();
-
-        // Update Storage
-        this.save();
-    }
-
-    /**
-     * Delete Task
-     * @param {string} taskID - Task ID
-     */
-    deleteTask(taskID) {
-        // Delete Task
-        this.list = this.list.filter(task => task.id !== taskID);
-
-        // Remove Task from Table
-        this.table.removeTask(taskID);
-
-        // Update Projects
-        this.updateProjects();
-
-        // Update Stats
-        this.updateStats();
-
-        // Update Storage
-        this.save();
-    }
-
-    /**
-     * Archive Task
-     * @param {string} taskID - Task ID
-     */
-    archiveTask(taskID) {
-        // Get List Index from Task ID
-        const index = this.indexFromTaskID(taskID);
-
-        // Archive Task
-        this.list[index].archiveTask();
-
-        // Remove Task from Table
-        this.table.removeRow(taskID);
-
-        // Update Projects
-        this.updateProjects();
-
-        // Update Stats
-        this.updateStats();
-
-        // Update Storage
-        this.save();
-    }
-
-    /**
-     * Restore Task
-     * @param {string} taskID - Task ID
-     */
-    restoreTask(taskID) {
-        // Get List Index from Task ID
-        const index = this.indexFromTaskID(taskID);
-
-        // Restore Task
-        this.list[index].restoreTask();
-
-        // Remove Task from Table
-        this.table.removeRow(taskID);
-
-        // Update Projects
-        this.updateProjects();
-
-        // Update Stats
-        this.updateStats();
-
-        // Update Storage
-        this.save();
     }
 
     /**
@@ -538,6 +320,94 @@ class List {
 
         // Update Stats
         this.updateStats();
+
+        // Add Task Button
+        document.getElementById('add_task').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.formClear();
+            this.modal.open('modal_edit');
+        });
+    }
+
+    /**
+     * Purge All User Data
+     */
+    dataPurge() {
+        this.storage.removeItem('todo_list');
+    }
+
+    /**
+     * Store All User Data
+     */
+    dataStore() {
+        this.storage.setItem('todo_list', JSON.stringify(this.list));
+    }
+
+    /**
+     * Add Event Listeners for Edit Buttons
+     * @param {object} container - Container Element
+     */
+    editButtons(container = null) {
+        if (container === null) {
+            container = document.querySelector('main table tbody');
+        }
+
+        // Task Edit Buttons
+        const a = container.querySelectorAll('.task_edit a');
+        for (let i = 0; i < a.length; i++) {
+            a[i].addEventListener('click', (e) => {
+                e.preventDefault();
+                this.editEntry(e);
+            });
+        }
+
+        // Task Checkboxes
+        const checkboxes = container.querySelectorAll("input[type='checkbox']");
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener('input', () => {
+                const taskID = checkboxes[i].id.replace('check_', '');
+                const index  = this.indexFromTaskID(taskID);
+                this.list[index].toggleStatus();
+                const row  = document.getElementById(taskID);
+                const comp = row.querySelector('.task_complete');
+                comp.innerText = this.list[index].getComplete();
+                if (checkboxes[i].checked) {
+                    row.classList.replace('incomplete', 'complete');
+                } else {
+                    row.classList.replace('complete', 'incomplete');
+                }
+                this.updateProjects();
+                this.updateStats();
+            });
+        }
+    }
+
+    /**
+     * Delete, Archive, Restore, or Edit Task
+     * @param {object} e - Event Object
+     */
+    editEntry(e) {
+        e.preventDefault();
+
+        // Get Data from Element
+        const taskID = e.currentTarget.dataset.id;
+        const action = e.currentTarget.dataset.action;
+
+        // Handle Action
+        switch (action) {
+            case 'delete':
+                this.taskDelete(taskID);
+                break;
+            case 'archive':
+                this.taskArchive(taskID);
+                break;
+            case 'restore':
+                this.taskRestore(taskID);
+                break;
+            default:
+                this.formLoad(taskID);
+                this.modal.open('modal_edit');
+        }
     }
 
     /**
@@ -554,6 +424,69 @@ class List {
 
         // Build Tasks
         const tasks = this.list.filter(task => task.archive === 0);
+        this.table.setTasks(tasks);
+    }
+
+    /**
+     * Archived Section
+     */
+    filterArchive() {
+        this.table.setColumns({
+            name     : 'Task',
+            project  : 'Project',
+            due      : 'Due By',
+            created  : 'Created',
+            complete : 'Complete'
+        });
+
+        // Build Tasks
+        const tasks = this.list.filter(task => task.archive === 1);
+        this.table.setTasks(tasks);
+    }
+
+    /**
+     * Overdue Section
+     */
+    filterOverdue() {
+        this.table.setColumns({
+            name     : 'Task',
+            project  : 'Project',
+            due      : 'Due By',
+            created  : 'Created'
+        });
+
+        // Build Tasks
+        const today = new Date().getTime();
+        const tasks = this.list.filter(task => {
+            if (task.due !== 0) {
+                const date = new Date(task.due).getTime();
+                return ((date <= today) && (task.complete === 0) && (task.archive === 0));
+            } else {
+                return false;
+            }
+        });
+        this.table.setTasks(tasks);
+    }
+
+    /**
+     * Archived Section
+     * @param {string} project - Project Name
+     */
+    filterProject(project) {
+        this.table.setColumns({
+            name     : 'Task',
+            due      : 'Due By',
+            created  : 'Created',
+            complete : 'Complete'
+        });
+
+        // Build Tasks
+        let tasks;
+        if (project === 'Other Tasks') {
+            tasks = this.list.filter(task => ((task.project === '') && (task.archive === 0)));
+        } else {
+            tasks = this.list.filter(task => ((task.project === project) && (task.archive === 0)));
+        }
         this.table.setTasks(tasks);
     }
 
@@ -613,66 +546,252 @@ class List {
     }
 
     /**
-     * Overdue Section
+     * Clear Form for New Task
      */
-    filterOverdue() {
-        this.table.setColumns({
-            name     : 'Task',
-            project  : 'Project',
-            due      : 'Due By',
-            created  : 'Created'
-        });
+    formClear() {
+        document.querySelector('#modal_edit h3').innerText = 'Add New Task';
+        document.querySelector('#new_task button').innerText = 'Add Task';
+        document.getElementById('new_name').value = '';
+        document.getElementById('new_project').value = '';
+        document.getElementById('new_due').value = '';
+        document.getElementById('new_id').value = '';
 
-        // Build Tasks
-        const today = new Date().getTime();
-        const tasks = this.list.filter(task => {
-            if (task.due !== 0) {
-                const date = new Date(task.due).getTime();
-                return ((date <= today) && (task.complete === 0) && (task.archive === 0));
-            } else {
-                return false;
-            }
-        });
-        this.table.setTasks(tasks);
+        const newProj = document.getElementById('new_add');
+        newProj.value = '';
+        newProj.style.display = 'none';
+        newProj.required = false;
+        document.querySelector("label[for='new_add']").style.display = 'none';
     }
 
     /**
-     * Archived Section
-     * @param {string} project - Project Name
+     * Load Form to Edit Task
+     * @param {string} taskID - Task ID
      */
-    filterProject(project) {
-        this.table.setColumns({
-            name     : 'Task',
-            due      : 'Due By',
-            created  : 'Created',
-            complete : 'Complete'
-        });
+    formLoad(taskID) {
+        // Get List Index from Task ID
+        const index = this.indexFromTaskID(taskID);
 
-        // Build Tasks
-        let tasks;
-        if (project === 'Other Tasks') {
-            tasks = this.list.filter(task => ((task.project === '') && (task.archive === 0)));
+        // Populate Form with Existing Values
+        document.querySelector('#modal_edit h3').innerText = 'Edit Task';
+        document.querySelector('#new_task button').innerText = 'Update Task';
+        document.getElementById('new_name').value = this.list[index].name;
+        document.getElementById('new_project').value = this.list[index].project;
+        document.getElementById('new_id').value = this.list[index].id;
+
+        if (this.list[index].due > 0) {
+            document.getElementById('new_due').valueAsDate = new Date(this.list[index].due);
         } else {
-            tasks = this.list.filter(task => ((task.project === project) && (task.archive === 0)));
+            document.getElementById('new_due').value = '';
         }
-        this.table.setTasks(tasks);
+
+        const newProj = document.getElementById('new_add');
+        newProj.value = '';
+        newProj.style.display = 'none';
+        newProj.required = false;
+        document.querySelector("label[for='new_add']").style.display = 'none';
     }
 
     /**
-     * Archived Section
+     * Generate Random Unique ID
+     * @returns {string} - Unique ID
      */
-    filterArchive() {
-        this.table.setColumns({
-            name     : 'Task',
-            project  : 'Project',
-            due      : 'Due By',
-            created  : 'Created',
-            complete : 'Complete'
-        });
+    generateId() {
+        return (Math.round(Date.now())).toString(36);
+    }
 
-        // Build Tasks
-        const tasks = this.list.filter(task => task.archive === 1);
-        this.table.setTasks(tasks);
+    /**
+     * Get Task Index from Task ID
+     * @param   {string} id - Task ID
+     * @returns {number} - Task Index
+     */
+    indexFromTaskID(id) {
+        return this.list.findIndex(task => task.id === id);
+    }
+
+    /**
+     * Load Tasks into List
+     */
+    loadTasks() {
+        let json;
+        if (this.storage.hasOwnProperty('todo_list')) {
+            // Load from LocalStorage
+            json = JSON.parse(this.storage.getItem('todo_list'));
+        } else {
+            // Load Default Tasks
+            json = JSON.parse(JSON.stringify(this.default));
+        }
+
+        // Loop through JSON
+        for (let i = 0; i < json.length; i++) {
+            // Add Task to List
+            this.list[i] = new Task(
+                json[i].id,
+                json[i].name,
+                json[i].project,
+                json[i].due,
+                json[i].created,
+                json[i].complete,
+                json[i].status,
+                json[i].archive
+            );
+
+            // Add Project
+            if ((json[i].project !== '') && (!this.projects.includes(json[i].project)) && (!parseInt(json[i].archive))) {
+                this.projects.push(json[i].project);
+            }
+        }
+    }
+
+    /**
+     * Add New or Edit Existing Task
+     */
+    taskAdd() {
+        // Get Task ID from Hidden Form Value
+        const taskID = document.getElementById('new_id').value;
+
+        // Check for Task ID
+        if (taskID !== '') {
+
+            /* * * * * * * * * * * *\
+             * Edit Existing Task  *
+            \* * * * * * * * * * * */
+
+            // Get Task Index from Task ID
+            const index = this.indexFromTaskID(taskID);
+
+            // Update Library from Form
+            const proj = document.getElementById('new_project').value;
+            const name = document.getElementById('new_add').value;
+            this.list[index].project = ((proj === '__new__') && (name !== '')) ? name : proj;
+            this.list[index].name    = document.getElementById('new_name').value;
+            this.list[index].due     = document.getElementById('new_due').valueAsNumber;
+
+            // Update Table from Library
+            const row = document.getElementById(taskID);
+            row.querySelector('.task_name').innerText    = this.list[index].getName();
+            row.querySelector('.task_project').innerText = this.list[index].getProject();
+            row.querySelector('.task_due').innerText     = this.list[index].getDue();
+
+        } else {
+
+            /* * * * * * * * * * * *\
+             *    Add New Task     *
+            \* * * * * * * * * * * */
+
+            let project;
+            const proj    = document.getElementById('new_project').value;
+            const name    = document.getElementById('new_add').value;
+            const created = Date.now();
+
+            if ((proj === '__new__') && (name !== '')) {
+                this.projects.push(name);
+                project = name;
+            } else {
+                project = proj;
+            }
+
+            // Create New Task from Form
+            const newTask = new Task(
+                this.generateId(),
+                document.getElementById('new_name').value,
+                project,
+                document.getElementById('new_due').valueAsNumber,
+                created.toString(),
+                '0',
+                '0',
+                '0'
+            );
+
+            // Add Task to List
+            this.list.push(newTask);
+
+            // Add Task to Table
+            this.table.addTask(newTask);
+
+            // Get New Row
+            const newRow = document.getElementById(newTask.id);
+
+            // Add Edit Button Event Listeners
+            this.editButtons(newRow);
+        }
+
+        // Update Projects
+        this.updateProjects();
+
+        // Update Stats
+        this.updateStats();
+
+        // Update Storage
+        this.dataStore();
+    }
+
+    /**
+     * Archive Task
+     * @param {string} taskID - Task ID
+     */
+    taskArchive(taskID) {
+        // Get List Index from Task ID
+        const index = this.indexFromTaskID(taskID);
+
+        // Archive Task
+        this.list[index].archiveTask();
+
+        // Remove Task from Table
+        this.table.removeRow(taskID);
+
+        // Update Projects
+        this.updateProjects();
+
+        // Update Stats
+        this.updateStats();
+
+        // Update Storage
+        this.dataStore();
+    }
+
+    /**
+     * Delete Task
+     * @param {string} taskID - Task ID
+     */
+    taskDelete(taskID) {
+        // Delete Task
+        this.list = this.list.filter(task => task.id !== taskID);
+
+        // Remove Task from Table
+        this.table.removeTask(taskID);
+
+        // Update Projects
+        this.updateProjects();
+
+        // Update Stats
+        this.updateStats();
+
+        // Update Storage
+        this.dataStore();
+    }
+
+    /**
+     * Restore Task
+     * @param {string} taskID - Task ID
+     */
+    taskRestore(taskID) {
+        // Get List Index from Task ID
+        const index = this.indexFromTaskID(taskID);
+
+        // Restore Task
+        this.list[index].restoreTask();
+
+        // Remove Task from Table
+        this.table.removeRow(taskID);
+
+        // Update Projects
+        this.updateProjects();
+
+        // Update Stats
+        this.updateStats();
+
+        // Update Storage
+        this.dataStore();
     }
 
     /**
@@ -680,25 +799,68 @@ class List {
      */
     updateProjects() {
 
+        // Nav Project Container
         const projNav = document.getElementById('nav_projects_list');
+
+        // New Task Project Select Element
         const projNew = document.getElementById('new_project');
 
+        // Reset Elements
         projNav.innerHTML = '';
         projNew.innerHTML = '<option value="">none</option>';
 
+        // Loop through Projects
         this.projects.forEach((proj) => {
-            const todo  = this.list.filter(task => ((task.project === proj) && (!task.status) && (!task.archive))).length;
+
+            // Count Total Tasks in Project
             const total = this.list.filter(task => ((task.project === proj) && (!task.archive))).length;
-            if (total) {
-                projNav.innerHTML += `<a href="#"><span class="bubble">${todo}</span><span class="label">${proj}</span></a>`;
+
+            if (total > 0) {
+
+                // Count Incomplete Tasks in Project
+                const todo = this.list.filter(task => ((task.project === proj) && (!task.status) && (!task.archive))).length;
+
+                // Add Option to New Task Project Select Element
                 projNew.innerHTML += `<option>${proj}</option>`;
+
+                // Create Project Link
+                const link = document.createElement('a');
+                link.setAttribute('href', '#');
+                link.innerHTML += `<span class="bubble">${todo}</span><span class="label">${proj}</span>`;
+                projNav.appendChild(link);
+
+                // Click Event Listener
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    // Get Project Name from Anchor Element
+                    const a = e.currentTarget;
+                    const name = a.getElementsByClassName('label')[0].textContent;
+
+                    // Remove "disable" Class from Other and Add to Link
+                    const last = document.getElementsByClassName('disable')[0];
+                    last.classList.remove('disable');
+                    link.classList.add('disable');
+
+                    // Update Title Text
+                    document.querySelector('h2').innerText = name;
+
+                    // Build New Table
+                    this.buildTable(name);
+                });
             } else {
-                //TODO: remove project from array
+                // Remove Project, No Associated Tasks
+                this.projects = this.projects.filter(p => p !== proj);
             }
         });
 
+        // Get Count for "Other Tasks"
         const none = this.list.filter(task => ((task.project === '') && (!task.status) && (!task.archive))).length;
+
+        // Add "Other Tasks" to Nav Project Container
         projNav.innerHTML += `<a href="#"><span class="bubble">${none}</span><span class="label">Other Tasks</span></a>`;
+
+        // Add "New Project" Option to New Task Project Select Element
         projNew.innerHTML += '<option value="__new__">New Project</option>';
     }
 
@@ -731,106 +893,6 @@ class List {
             <div>Complete:   <span>${complete.toLocaleString()}</span></div>
             <div>Projects:   <span>${projects.toLocaleString()}</span></div>
             <div>Archived:   <span>${archived.toLocaleString()}</span></div>`;
-    }
-
-    /**
-     * Load Tasks into List
-     */
-    loadTasks() {
-        let json;
-        if (this.storage.hasOwnProperty('todo_list')) {
-            // Load from LocalStorage
-            json = JSON.parse(this.storage.getItem('todo_list'));
-        } else {
-            // Load Default Tasks
-            json = this.default
-        }
-
-        // Loop through JSON
-        for (let i = 0; i < json.length; i++) {
-            // Add Task to List
-            this.list[i] = new Task(
-                json[i].id,
-                json[i].name,
-                json[i].project,
-                json[i].due.toString(),
-                json[i].created.toString(),
-                json[i].complete.toString(),
-                json[i].status.toString(),
-                json[i].archive.toString()
-            );
-
-            // Add Project
-            if ((json[i].project !== '') && (!this.projects.includes(json[i].project)) && (!parseInt(json[i].archive))) {
-                this.projects.push(json[i].project);
-            }
-        }
-    }
-
-    /**
-     * Load Form to Edit Task
-     * @param {string} taskID - Task ID
-     */
-    loadForm(taskID) {
-        // Get List Index from Task ID
-        const index = this.indexFromTaskID(taskID);
-
-        // Populate Form with Existing Values
-        document.querySelector('#modal_edit h3').innerText = 'Edit Task';
-        document.querySelector('#new_task button').innerText = 'Update Task';
-        document.getElementById('new_name').value = this.list[index].name;
-        document.getElementById('new_project').value = this.list[index].project;
-        document.getElementById('new_add').value = '';
-        if (this.list[index].due > 0) {
-            document.getElementById('new_due').valueAsDate = new Date(this.list[index].due);
-        } else {
-            document.getElementById('new_due').value = '';
-        }
-        document.getElementById('new_id').value = this.list[index].id;
-    }
-
-    /**
-     * Clear Form for New Task
-     */
-    clearForm() {
-        document.querySelector('#modal_edit h3').innerText = 'Add New Task';
-        document.querySelector('#new_task button').innerText = 'Add Task';
-        document.getElementById('new_name').value = '';
-        document.getElementById('new_project').value = '';
-        document.getElementById('new_add').value = '';
-        document.getElementById('new_due').value = '';
-        document.getElementById('new_id').value = '';
-    }
-
-    /**
-     * Get Task Index from Task ID
-     * @param   {string} id - Task ID
-     * @returns {number} - Task Index
-     */
-    indexFromTaskID(id) {
-        return this.list.findIndex(task => task.id === id);
-    }
-
-    /**
-     * Generate Random Unique ID
-     * @returns {string} - Unique ID
-     */
-    generateId() {
-        return (Math.round(Date.now())).toString(36);
-    }
-
-    /**
-     * Purge All User Data
-     */
-    purge() {
-        this.storage.removeItem('todo_list');
-    }
-
-    /**
-     * Save All User Data
-     */
-    save() {
-        this.storage.setItem('todo_list', JSON.stringify(this.list));
     }
 }
 

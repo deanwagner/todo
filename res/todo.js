@@ -133,7 +133,7 @@ class ToDo {
         document.getElementById('default_confirm').addEventListener('click', (e) => {
             e.preventDefault();
             this.theme.purge();
-            this.list.purge();
+            this.list.dataPurge();
             this.modal.close('modal_default');
             location.reload();
         });

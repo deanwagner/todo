@@ -6,7 +6,7 @@
  * @property {string} id
  * @property {string} name
  * @property {string} project
- * @property {number} due;
+ * @property {number} due
  * @property {number} created
  * @property {number} complete
  * @property {number} status
