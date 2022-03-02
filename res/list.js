@@ -53,6 +53,15 @@ class List {
         status   : 0,
         archive  : 0
     }, {
+        id       : 'okmnjiuhbvgy',
+        name     : 'Check Mail',
+        project  : 'Daily Chores',
+        due      : 0,
+        created  : new Date('2022-02-18').getTime(),
+        complete : 0,
+        status   : 1,
+        archive  : 0
+    }, {
         id       : 'edcrfvujmygv',
         name     : 'Renew Drivers License',
         project  : '',
@@ -116,131 +125,14 @@ class List {
         status   : 0,
         archive  : 0
     }, {
-        id       : 'dfggdshjkjvbn',
-        name     : 'Intermediate HTML and CSS',
-        project  : 'Odin Project',
+        id       : 'dcfvgtresdfghjmn',
+        name     : 'Water Plants',
+        project  : 'Daily Chores',
         due      : 0,
-        created  : new Date('2022-01-11').getTime(),
-        complete : new Date('2022-01-12').getTime(),
-        status   : 1,
-        archive  : 0
-    }, {
-        id       : 'lkjhkfhuimhj',
-        name     : 'JavaScript',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-11').getTime(),
+        created  : new Date('2022-02-21').getTime(),
         complete : 0,
         status   : 0,
         archive  : 0
-    }, {
-        id       : 'zxcvfdsdsar',
-        name     : 'Advanced HTML and CSS',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-11').getTime(),
-        complete : 0,
-        status   : 0,
-        archive  : 0
-    }, {
-        id       : 'mnbvhgjkliuy',
-        name     : 'NodeJS',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-11').getTime(),
-        complete : 0,
-        status   : 0,
-        archive  : 0
-    }, {
-        id       : 'vcxxzdfkljh',
-        name     : 'Getting Hired',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-11').getTime(),
-        complete : 0,
-        status   : 0,
-        archive  : 0
-    }, {
-        id       : 'qwerrgfdfgd',
-        name     : 'Introduction',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-02').getTime(),
-        status   : 1,
-        archive  : 1
-    }, {
-        id       : 'jhkkgkgyign',
-        name     : 'Installations',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-03').getTime(),
-        status   : 1,
-        archive  : 1
-    }, {
-        id       : 'tryhgfgjjyut',
-        name     : 'Git Basics',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-04').getTime(),
-        status   : 1,
-        archive  : 1
-    }, {
-        id       : 'trytrytyjhfgds',
-        name     : 'HTML Foundations',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-05').getTime(),
-        status   : 1,
-        archive  : 1
-    }, {
-        id       : 'trytrytyjhfgds',
-        name     : 'CSS Foundations',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-06').getTime(),
-        status   : 1,
-        archive  : 1
-    }, {
-        id       : 'qxcxzkjlkjiio',
-        name     : 'Flexbox',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-07').getTime(),
-        status   : 1,
-        archive  : 1
-    }, {
-        id       : 'poipopoujhkh',
-        name     : 'JavaScript Basics',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-08').getTime(),
-        status   : 1,
-        archive  : 1
-    }, {
-        id       : 'uiuyrrtytrgh',
-        name     : 'The Back End',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-09').getTime(),
-        status   : 1,
-        archive  : 1
-    }, {
-        id       : 'bvnbcghqwerty',
-        name     : 'Conclusion',
-        project  : 'Odin Project',
-        due      : 0,
-        created  : new Date('2022-01-01').getTime(),
-        complete : new Date('2022-01-10').getTime(),
-        status   : 1,
-        archive  : 1
     }];
 
     /**

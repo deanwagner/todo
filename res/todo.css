@@ -14,7 +14,7 @@
 
 :root {
     /* Default/Light Colors */
-    --color-accent : #009999;
+    --color-accent : #006666;
     --color-shadow : #080808;
     --color-bg     : #fafafa;
     --color-item   : #dddddd;
@@ -26,9 +26,9 @@
     --shadow-text  : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
     --shadow-title : 0.1rem 0.1rem 0.2rem rgba(0,0,0,0.3);
     --shadow-link  : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
-    --shadow-box   : 0 0 0.3rem rgba(0,0,0,0.3);
+    --shadow-box   : 0 0 0.3rem rgba(0,0,0,0.3), 0.3rem 0.3rem 0 var(--color-accent);
     --glow-text    : 0 0 0.1rem var(--color-title);
-    --glow-box     : 0 0 0.5rem var(--color-title);
+    --glow-box     : 0 0 0.5rem var(--color-title), 0.3rem 0.3rem 0 var(--color-title);
 
     /* Light Color Scheme */
     color-scheme : light;
@@ -46,9 +46,9 @@
     --dark-shadow-text  : 0.05rem 0.05rem 0.2rem var(--dark-color-shadow);
     --dark-shadow-title : 0.15rem 0.15rem 0.05rem var(--dark-color-shadow);
     --dark-shadow-link  : 0.1rem 0.1rem 0.1rem var(--dark-color-shadow);
-    --dark-shadow-box   : 0 0 1rem var(--dark-color-shadow);
+    --dark-shadow-box   : 0 0 0.5rem rgba(0,0,0,0.8), 0.3rem 0.3rem 0 var(--dark-color-accent);
     --dark-glow-text    : 0 0 0.2rem var(--dark-color-title);
-    --dark-glow-box     : 0 0 0.8rem var(--dark-color-title);
+    --dark-glow-box     : 0 0 0.8rem var(--dark-color-title), 0.3rem 0.3rem 0 var(--dark-color-title);
 
     /* Dark Color Scheme */
     --dark-color-scheme : dark;
@@ -218,7 +218,7 @@ button:hover,
 button:focus,
 button:active {
     background-color: var(--color-title);
-    box-shadow: var(--glow-box);
+    box-shadow: var(--glow-text);
 }
 
 /* * * * * * * * *\
@@ -227,7 +227,7 @@ button:active {
 
 aside {
     background: var(--color-item) var(--gradient-split);
-    box-shadow: var(--shadow-body);
+    box-shadow: var(--shadow-body), 0.3rem 0 0 var(--color-accent);
     display: flex;
     flex-direction: column;
     left: 0;
@@ -426,13 +426,14 @@ main {
 main table {
     border: none;
     border-collapse: separate;
-    border-spacing: 0 2em;
+    border-spacing: 0 2.5em;
     width: 100%;
 }
 
 main table tr {
     background: var(--color-item) var(--gradient-split);
     box-shadow: var(--shadow-box);
+    transition: var(--transition-all);
 }
 
 main table tr td,
@@ -489,9 +490,15 @@ main table tbody tr:hover {
     outline: var(--border-solid);
 }
 
+main table tbody tr td {
+    padding: 1.5em 0.5em;
+}
+
 main table tbody label {
     cursor: pointer;
     display: block;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 main table tbody input[type='checkbox'] {
@@ -499,10 +506,6 @@ main table tbody input[type='checkbox'] {
     cursor: pointer;
     height: 1.5rem;
     width: 1.5rem;
-}
-
-main table tbody label {
-
 }
 
 main table tbody .incomplete {
