@@ -1,0 +1,32 @@
+{
+    "name"        : "/ / T O D O : ",
+    "short_name"  : "TODO",
+    "description" : "A To-Do List App",
+    "icons"       : [{
+        "src"   : "img/todo.svg",
+        "type"  : "image/svg+xml",
+        "sizes" : "any"
+    }, {
+        "src"   : "img/todo-192.png",
+        "type"  : "image/png",
+        "sizes" : "192x192"
+    }, {
+        "src"   : "img/todo-512.png",
+        "type"  : "image/png",
+        "sizes" : "512x512"
+    }],
+    "start_url"        : "index.html",
+    "background_color" : "#666666",
+    "theme_color"      : "#333333",
+    "display"          : "standalone",
+    "scope"            : "/todo/",
+    "screenshots"      : [{
+        "src"   : "img/todo-pc-dark.png",
+        "type"  : "image/png",
+        "sizes" : "650x365"
+    }, {
+       "src"   : "img/todo-pc-light.png",
+       "type"  : "image/png",
+       "sizes" : "650x365"
+   }]
+}
