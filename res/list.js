@@ -133,6 +133,24 @@ class List {
         complete : 0,
         status   : 0,
         archive  : 0
+    }, {
+        id       : 'dgsdfgyutygh',
+        name     : 'Renew Passport',
+        project  : '',
+        due      : new Date('2022-02-11').getTime(),
+        created  : new Date('2022-01-14').getTime(),
+        complete : new Date('2022-02-10').getTime(),
+        status   : 1,
+        archive  : 1
+    }, {
+        id       : 'xcvbtyudfgklgh',
+        name     : 'Make Vet Appointment',
+        project  : '',
+        due      : new Date('2022-02-05').getTime(),
+        created  : new Date('2022-01-16').getTime(),
+        complete : new Date('2022-02-02').getTime(),
+        status   : 1,
+        archive  : 1
     }];
 
     /**
@@ -310,8 +328,8 @@ class List {
             name     : 'Task',
             project  : 'Project',
             due      : 'Due By',
-            created  : 'Created',
-            complete : 'Complete'
+            complete : 'Complete',
+            created  : 'Created'
         });
 
         // Build Tasks
@@ -327,8 +345,8 @@ class List {
             name     : 'Task',
             project  : 'Project',
             due      : 'Due By',
-            created  : 'Created',
-            complete : 'Complete'
+            complete : 'Complete',
+            created  : 'Created'
         });
 
         // Build Tasks
@@ -368,8 +386,8 @@ class List {
         this.table.setColumns({
             name     : 'Task',
             due      : 'Due By',
-            created  : 'Created',
-            complete : 'Complete'
+            complete : 'Complete',
+            created  : 'Created'
         });
 
         // Build Tasks

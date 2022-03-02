@@ -175,11 +175,11 @@ class Table {
         if ('due' in this.columns) {
             html += `<td class="task_due">${task.getDue()}</td>`;
         }
-        if ('created' in this.columns) {
-            html += `<td class="task_created">${task.getCreated()}</td>`;
-        }
         if ('complete' in this.columns) {
             html += `<td class="task_complete">${task.getComplete()}</td>`;
+        }
+        if ('created' in this.columns) {
+            html += `<td class="task_created">${task.getCreated()}</td>`;
         }
         html += '<td class="task_edit">';
 
