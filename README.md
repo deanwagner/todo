@@ -23,12 +23,12 @@ This project was created for the [To-Do List assignment](https://www.theodinproj
 1. Have projects or separate lists of tasks
 2. ‘Default’ project to which all tasks are put
 3. Create new projects and choose which project tasks go into
-4. Separate application logic
-5. UI Requirements:
+4. UI Requirements:
    - View all tasks
    - View tasks in each project
    - Edit task
    - Delete task
+5. Separate application logic from DOM manipulation
 6. Use Web Storage API to store data
 
 ### Scope Creep
