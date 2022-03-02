@@ -13,7 +13,7 @@ This project was created for the [To-Do List assignment](https://www.theodinproj
 ### Provided Assets
 
 * Examples: 
-  - [ToDoIst.com](https://en.todoist.com/)
+  - [todoist.com](https://en.todoist.com/)
   - [Things](https://culturedcode.com/things/)
   - [any.do](https://www.any.do/)
 * ~~JavaScript Library:~~ [date-fns](https://github.com/date-fns/date-fns)
