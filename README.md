@@ -20,18 +20,19 @@ This project was created for the [To-Do List assignment](https://www.theodinproj
 
 ### Objectives
 
-1. Have projects or separate lists of todos
-2. ‘default’ project to which all todos are put
-3. Create new projects and choose which project todos go into
+1. Have projects or separate lists of tasks
+2. ‘Default’ project to which all tasks are put
+3. Create new projects and choose which project tasks go into
 4. Separate application logic
 5. UI Requirements:
-   - View all projects
-   - View all todos in each project
-   - Expand todo to edit details
-   - Delete todo
+   - View all tasks
+   - View tasks in each project
+   - Edit task
+   - Delete task
 6. Use Web Storage API to store data
 
 ### Scope Creep
 
-* Custom Accent Color
+* Created 'Today', 'Upcoming', and 'Overdue' views
 * Light/Dark themes that automatically load based on the user's browser/OS settings
+* Custom accent color
