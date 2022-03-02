@@ -37,7 +37,9 @@ class ToDo {
         document.getElementById('nav_all').addEventListener('click', (e) => {
             e.preventDefault();
             const last = document.getElementsByClassName('disable')[0];
-            last.classList.remove('disable');
+            if (typeof last !== 'undefined') {
+                last.classList.remove('disable');
+            }
             e.currentTarget.classList.add('disable');
             this.title.innerText = 'All Tasks';
             this.list.buildTable();
@@ -47,7 +49,9 @@ class ToDo {
         document.getElementById('nav_today').addEventListener('click', (e) => {
             e.preventDefault();
             const last = document.getElementsByClassName('disable')[0];
-            last.classList.remove('disable');
+            if (typeof last !== 'undefined') {
+                last.classList.remove('disable');
+            }
             e.currentTarget.classList.add('disable');
             this.title.innerText = 'Today';
             this.list.buildTable('today');
@@ -57,7 +61,9 @@ class ToDo {
         document.getElementById('nav_upcoming').addEventListener('click', (e) => {
             e.preventDefault();
             const last = document.getElementsByClassName('disable')[0];
-            last.classList.remove('disable');
+            if (typeof last !== 'undefined') {
+                last.classList.remove('disable');
+            }
             e.currentTarget.classList.add('disable');
             this.title.innerText = 'Upcoming';
             this.list.buildTable('upcoming');
@@ -67,12 +73,15 @@ class ToDo {
         document.getElementById('nav_overdue').addEventListener('click', (e) => {
             e.preventDefault();
             const last = document.getElementsByClassName('disable')[0];
-            last.classList.remove('disable');
+            if (typeof last !== 'undefined') {
+                last.classList.remove('disable');
+            }
             e.currentTarget.classList.add('disable');
             this.title.innerText = 'Overdue';
             this.list.buildTable('overdue');
         });
 
+        /*
         // Project Links
         const projects = document.querySelectorAll('#nav_projects_list a');
         projects.forEach((proj) => {
@@ -87,12 +96,15 @@ class ToDo {
                 this.list.buildTable(name);
             });
         });
+        */
 
         // Archive Link
         document.getElementById('nav_archive').addEventListener('click', (e) => {
             e.preventDefault();
             const last = document.getElementsByClassName('disable')[0];
-            last.classList.remove('disable');
+            if (typeof last !== 'undefined') {
+                last.classList.remove('disable');
+            }
             e.currentTarget.classList.add('disable');
             this.title.innerText = 'Archive';
             this.list.buildTable('archive');

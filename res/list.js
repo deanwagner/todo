@@ -11,7 +11,7 @@ import Table from './table.js';
  * @property {object} modal    - Modal Object
  * @property {object} storage  - LocalStorage
  * @property {array}  projects - Task Projects
- * @property {object} table    - Default Task Data
+ * @property {object} table    - Table Object
  * @property {array}  default  - Default Task Data
  * @author Dean Wagner <info@deanwagner.net>
  */
@@ -822,33 +822,10 @@ class List {
 
                 // Add Option to New Task Project Select Element
                 projNew.innerHTML += `<option>${proj}</option>`;
+                projNav.innerHTML += `<a href="#"><span class="bubble">${todo}</span><span class="label">${proj}</span></a>`;
 
-                // Create Project Link
-                const link = document.createElement('a');
-                link.setAttribute('href', '#');
-                link.innerHTML += `<span class="bubble">${todo}</span><span class="label">${proj}</span>`;
-                projNav.appendChild(link);
-
-                // Click Event Listener
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-
-                    // Get Project Name from Anchor Element
-                    const a = e.currentTarget;
-                    const name = a.getElementsByClassName('label')[0].textContent;
-
-                    // Remove "disable" Class from Other and Add to Link
-                    const last = document.getElementsByClassName('disable')[0];
-                    last.classList.remove('disable');
-                    link.classList.add('disable');
-
-                    // Update Title Text
-                    document.querySelector('h2').innerText = name;
-
-                    // Build New Table
-                    this.buildTable(name);
-                });
             } else {
+
                 // Remove Project, No Associated Tasks
                 this.projects = this.projects.filter(p => p !== proj);
             }
@@ -862,6 +839,30 @@ class List {
 
         // Add "New Project" Option to New Task Project Select Element
         projNew.innerHTML += '<option value="__new__">New Project</option>';
+
+        // Click Event Listener
+        const projLinks = document.querySelectorAll('#nav_projects_list a');
+        for (let i = 0; i < projLinks.length; i++) {
+            projLinks[i].addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // Get Project Name from Anchor Element
+                const a = e.currentTarget;
+                const name = a.getElementsByClassName('label')[0].textContent;
+
+                // Remove "disable" Class from Other and Add to Link
+                const last = document.getElementsByClassName('disable')[0];
+                if (typeof last !== 'undefined') { last.classList.remove('disable'); }
+                a.classList.add('disable');
+
+                // Update Title Text
+                document.querySelector('h2').innerText = name;
+
+                // Build New Table
+                this.buildTable(name);
+            });
+        }
+
     }
 
     /**
