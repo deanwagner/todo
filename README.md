@@ -36,3 +36,4 @@ This project was created for the [To-Do List assignment](https://www.theodinproj
 * Created 'Today', 'Upcoming', and 'Overdue' views
 * Light/Dark themes that automatically load based on the user's browser/OS settings
 * Custom accent color
+* PWA and A2HS Support
