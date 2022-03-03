@@ -5,11 +5,13 @@ Live Demo:
 https://deanwagner.github.io/todo/
 
 PC View:  
+
 ![Project Screenshot](https://deanwagner.github.io/todo/img/todo-pc-dark.png)
 
 ![Project Screenshot](https://deanwagner.github.io/todo/img/todo-pc-light.png)
 
 Mobile View:  
+
 ![Project Screenshot](https://deanwagner.github.io/todo/img/todo-mobile-dark.png) ![Project Screenshot](https://deanwagner.github.io/todo/img/todo-mobile-light.png)
 
 This project was created for the [To-Do List assignment](https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript/lessons/todo-list) as part of [The Odin Project](https://www.theodinproject.com) curriculum. I met all the assignment objectives and then expanded on it with my own concepts to make it more functional and user-friendly.
