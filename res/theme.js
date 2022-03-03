@@ -95,6 +95,26 @@ class Theme {
             document.getElementById('color-accent').value = this.settings.accent;
         });
 
+        // Collapse Navigation
+        document.getElementsByTagName('h1')[0].addEventListener('click', () => {
+            document.body.classList.toggle('collapsed');
+        });
+
+        // Resize Window Event Listener
+        window.addEventListener('resize', () => {
+            if (window.innerHeight >= window.innerWidth) {
+                document.body.classList.add('collapsed');
+            } else {
+                document.body.classList.remove('collapsed');
+            }
+        });
+
+        // Automatically Collapse Nav for Mobile Devices
+        const isMobile = parseInt(this.getStyleProperty('mobile-view'));
+        if (isMobile) {
+            document.body.classList.add('collapsed');
+        }
+
         // Enable Transitions
         this.setStyleProperty('transition-all', this.getStyleProperty('transition-start'));
     }

@@ -3,7 +3,7 @@
 // Import Modules
 import Theme from './theme.js';
 import List  from './list.js';
-import Modal from 'https://deanwagner.github.io/modules/modal/modal.js';
+import Modal from './modal/modal.js';
 
 /**
  * To-Do List

@@ -1,5 +1,5 @@
 /* Import Assets */
-@import 'https://deanwagner.github.io/modules/modal/modal.css';
+@import './modal/modal.css';
 
 /* * * * * * * * * * * *\
  *     To-Do List      *
@@ -235,6 +235,7 @@ aside {
     padding: 1em;
     position: fixed;
     top: 0;
+    transition: width 0.1s ease-out;
     width: 16em;
 }
 
@@ -248,9 +249,23 @@ aside h1, header h2 {
     text-shadow: var(--shadow-title);
 }
 
+aside h1, aside h1 * {
+    cursor: pointer;
+    transition: var(--transition-all);
+}
+
+aside h1:hover {
+    text-shadow: var(--glow-text);
+}
+
+aside h1:hover svg {
+    filter: drop-shadow(var(--glow-text));
+}
+
 aside h1 svg {
     filter: drop-shadow(var(--shadow-title));
     height: 1em;
+    transition: all 0.1s ease-out;
     vertical-align: top;
     width: 1em;
 }
@@ -374,6 +389,85 @@ nav a.disable:focus span, nav a.disable:active span {
 }
 
 /* * * * * * * * *\
+ * Collapsed Nav *
+\* * * * * * * * */
+
+.collapsed aside {
+    padding: 1em 0;
+    text-align: center;
+    width: 3.5em;
+}
+
+aside span.label {
+    position: static;
+    transition-delay: 0.1s;
+    transition-duration: 0.2s;
+    transition-property: visibility;
+    transition-timing-function: ease-out;
+    visibility: visible;
+    white-space: nowrap;
+}
+
+.collapsed aside span.label {
+    position: absolute;
+    transition-delay: 0s;
+    transition-duration: 0s;
+    visibility: hidden;
+}
+
+.collapsed aside a:hover span.label,
+.collapsed aside a:focus span.label {
+    background-color: var(--color-item);
+    box-shadow: var(--shadow-text);
+    margin: -0.3em 0 0 0.2em;
+    padding: 0.5em 0.8em;
+    visibility: visible;
+}
+
+.collapsed aside a.disable:hover span.label,
+.collapsed aside a.disable:focus span.label {
+    visibility: hidden;
+}
+
+.collapsed aside h1 svg {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.collapsed aside nav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 0;
+    height: 100%;
+}
+
+.collapsed aside nav a {
+    text-align: center;
+}
+
+.collapsed aside nav a svg,
+.collapsed #nav_projects_list .bubble {
+    height: 1.5em;
+    margin: 0.2em 0;
+    width: 1.5em;
+}
+
+.collapsed #nav_projects_list a:hover .bubble,
+.collapsed #nav_projects_list a:focus .bubble {
+    margin-left: 0;
+}
+
+.collapsed aside nav #empty_space {
+    flex: 0;
+    margin-top: 1em;
+}
+
+.collapsed section {
+    margin-left: 3.5em;
+}
+
+/* * * * * * * * *\
  *    Section    *
 \* * * * * * * * */
 
@@ -386,6 +480,7 @@ section {
     min-height: 100vh;
     padding: 1em 2em;
     margin-left: 16em;
+    transition: margin 0.1s ease-out;
 }
 
 /* * * * * * * * *\
@@ -497,7 +592,7 @@ main table tbody tr td {
 main table tbody label {
     cursor: pointer;
     display: block;
-    font-size: 1.2rem;
+    font-size: 1.2em;
     font-weight: bold;
 }
 
@@ -548,9 +643,9 @@ main tfoot #task_stats span {
     text-shadow: var(--shadow-link);
 }
 
-    /* * * * * * * * *\
-     *    Footer     *
-    \* * * * * * * * */
+/* * * * * * * * *\
+ *    Footer     *
+\* * * * * * * * */
 
 footer {
     display: block;
@@ -610,9 +705,9 @@ footer {
     display: none;
 }
 
-    /* * * * * * * * *\
-     *    History    *
-    \* * * * * * * * */
+/* * * * * * * * *\
+ *    History    *
+\* * * * * * * * */
 
 #modal_default p {
     max-width: 40ch;
@@ -647,8 +742,7 @@ footer {
 
 @media screen and (orientation: portrait) {
     :root { --mobile-view: 1; }
-    aside { display: none; }
-    section { margin-left: 0; }
+    body { font-size: 10pt; }
 }
 
 @media screen and (prefers-color-scheme: dark) {
