@@ -3,6 +3,7 @@
 
 Live Demo:  
 https://deanwagner.github.io/todo/
+
 PC View:  
 ![Project Screenshot](https://deanwagner.github.io/todo/img/todo-pc-dark.png)
 
