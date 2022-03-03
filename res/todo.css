@@ -14,7 +14,8 @@
 
 :root {
     /* Default/Light Colors */
-    --color-accent : #006666;
+    --color-accent : #009999;
+    --color-notice : #990000;
     --color-shadow : #080808;
     --color-bg     : #fafafa;
     --color-item   : #dddddd;
@@ -22,19 +23,22 @@
     --color-title  : #333333;
 
     /* Default/Light Shadows/Glow */
-    --shadow-body  : 0 0 1em rgba(0,0,0,0.3);
-    --shadow-text  : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
-    --shadow-title : 0.1rem 0.1rem 0.2rem rgba(0,0,0,0.3);
-    --shadow-link  : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
-    --shadow-box   : 0 0 0.3rem rgba(0,0,0,0.3), 0.3rem 0.3rem 0 var(--color-accent);
-    --glow-text    : 0 0 0.1rem var(--color-title);
-    --glow-box     : 0 0 0.5rem var(--color-title), 0.3rem 0.3rem 0 var(--color-title);
+    --shadow-body   : 0 0 1em rgba(0,0,0,0.3);
+    --shadow-text   : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
+    --shadow-title  : 0.1rem 0.1rem 0.2rem rgba(0,0,0,0.3);
+    --shadow-link   : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
+    --shadow-box    : 0 0 0.3rem rgba(0,0,0,0.3), 0.3rem 0.3rem 0 var(--color-accent);
+    --shadow-notice : 0 0 0.3rem rgba(0,0,0,0.3), 0.3rem 0.3rem 0 var(--color-notice);
+    --glow-text     : 0 0 0.1rem var(--color-title);
+    --glow-box      : 0 0 0.5rem var(--color-title), 0.3rem 0.3rem 0 var(--color-title);
+    --glow-notice   : 0 0 0.5rem var(--color-notice), 0.3rem 0.3rem 0 var(--color-notice);
 
     /* Light Color Scheme */
     color-scheme : light;
 
     /* Dark Colors */
     --dark-color-accent : #00ffff;
+    --dark-color-notice : #ff0000;
     --dark-color-shadow : #080808;
     --dark-color-bg     : #333333;
     --dark-color-item   : #666666;
@@ -42,13 +46,15 @@
     --dark-color-title  : #fafafa;
 
     /* Dark Shadows/Glow */
-    --dark-shadow-body  : 0 0 1.5em rgba(0,0,0,0.8);
-    --dark-shadow-text  : 0.05rem 0.05rem 0.2rem var(--dark-color-shadow);
-    --dark-shadow-title : 0.15rem 0.15rem 0.05rem var(--dark-color-shadow);
-    --dark-shadow-link  : 0.1rem 0.1rem 0.1rem var(--dark-color-shadow);
-    --dark-shadow-box   : 0 0 0.5rem rgba(0,0,0,0.8), 0.3rem 0.3rem 0 var(--dark-color-accent);
-    --dark-glow-text    : 0 0 0.2rem var(--dark-color-title);
-    --dark-glow-box     : 0 0 0.8rem var(--dark-color-title), 0.3rem 0.3rem 0 var(--dark-color-title);
+    --dark-shadow-body   : 0 0 1.5em rgba(0,0,0,0.8);
+    --dark-shadow-text   : 0.05rem 0.05rem 0.2rem var(--dark-color-shadow);
+    --dark-shadow-title  : 0.15rem 0.15rem 0.05rem var(--dark-color-shadow);
+    --dark-shadow-link   : 0.1rem 0.1rem 0.1rem var(--dark-color-shadow);
+    --dark-shadow-box    : 0 0 0.5rem rgba(0,0,0,0.8), 0.3rem 0.3rem 0 var(--dark-color-accent);
+    --dark-shadow-notice : 0 0 0.5rem rgba(0,0,0,0.8), 0.3rem 0.3rem 0 var(--dark-color-notice);
+    --dark-glow-text     : 0 0 0.2rem var(--dark-color-title);
+    --dark-glow-box      : 0 0 0.8rem var(--dark-color-title), 0.3rem 0.3rem 0 var(--dark-color-title);
+    --dark-glow-notice   : 0 0 0.8rem var(--dark-color-notice), 0.3rem 0.3rem 0 var(--dark-color-notice);
 
     /* Dark Color Scheme */
     --dark-color-scheme : dark;
@@ -56,6 +62,7 @@
     /* Borders */
     --border-solid  : 1px solid var(--color-title);
     --outline-solid : 2px solid var(--color-accent);
+    --border-notice : 1px solid var(--color-notice);
 
     /* Font Families */
     --font-base  : Tahoma, Verdana, Geneva, sans-serif;
@@ -587,6 +594,15 @@ main thead th .dec::after {
 main table tbody tr:hover {
     box-shadow: var(--glow-box);
     outline: var(--border-solid);
+}
+
+main table tr.priority {
+    box-shadow: var(--shadow-notice);
+}
+
+main table tbody tr.priority:hover {
+    box-shadow: var(--glow-notice);
+    outline: var(--border-notice);
 }
 
 main table tbody tr td {

@@ -31,8 +31,10 @@ class Theme {
         'shadow-title',
         'shadow-link',
         'shadow-box',
+        'shadow-notice',
         'glow-text',
         'glow-box',
+        'glow-notice',
         'color-scheme'
     ];
 

@@ -32,6 +32,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-22').getTime(),
         complete : new Date('2022-02-23').getTime(),
+        priority : 0,
         status   : 1,
         archive  : 0
     }, {
@@ -41,6 +42,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-23').getTime(),
         complete : 0,
+        priority : 0,
         status   : 0,
         archive  : 0
     }, {
@@ -50,6 +52,7 @@ class List {
         due      : Date.now() + 345600000,
         created  : new Date('2022-02-20').getTime(),
         complete : 0,
+        priority : 1,
         status   : 0,
         archive  : 0
     }, {
@@ -59,6 +62,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-18').getTime(),
         complete : 0,
+        priority : 0,
         status   : 1,
         archive  : 0
     }, {
@@ -68,6 +72,7 @@ class List {
         due      : Date.now() + 10800000,
         created  : new Date('2022-02-18').getTime(),
         complete : 0,
+        priority : 1,
         status   : 0,
         archive  : 0
     }, {
@@ -77,6 +82,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-21').getTime(),
         complete : 0,
+        priority : 0,
         status   : 0,
         archive  : 0
     }, {
@@ -86,6 +92,7 @@ class List {
         due      : Date.now() - 345600000,
         created  : new Date('2022-02-18').getTime(),
         complete : 0,
+        priority : 0,
         status   : 0,
         archive  : 0
     }, {
@@ -95,6 +102,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-20').getTime(),
         complete : 0,
+        priority : 0,
         status   : 0,
         archive  : 0
     }, {
@@ -104,6 +112,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-21').getTime(),
         complete : new Date('2022-02-21').getTime(),
+        priority : 0,
         status   : 1,
         archive  : 0
     }, {
@@ -113,6 +122,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-21').getTime(),
         complete : 0,
+        priority : 0,
         status   : 0,
         archive  : 0
     }, {
@@ -122,6 +132,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-21').getTime(),
         complete : 0,
+        priority : 0,
         status   : 0,
         archive  : 0
     }, {
@@ -131,6 +142,7 @@ class List {
         due      : 0,
         created  : new Date('2022-02-21').getTime(),
         complete : 0,
+        priority : 0,
         status   : 0,
         archive  : 0
     }, {
@@ -140,6 +152,7 @@ class List {
         due      : new Date('2022-02-11').getTime(),
         created  : new Date('2022-01-14').getTime(),
         complete : new Date('2022-02-10').getTime(),
+        priority : 1,
         status   : 1,
         archive  : 1
     }, {
@@ -149,6 +162,7 @@ class List {
         due      : new Date('2022-02-05').getTime(),
         created  : new Date('2022-01-16').getTime(),
         complete : new Date('2022-02-02').getTime(),
+        priority : 0,
         status   : 1,
         archive  : 1
     }];
@@ -464,6 +478,7 @@ class List {
         document.getElementById('new_name').value = '';
         document.getElementById('new_project').value = '';
         document.getElementById('new_due').value = '';
+        document.getElementById('new_priority').value = '0';
         document.getElementById('new_id').value = '';
 
         const newProj = document.getElementById('new_add');
@@ -486,6 +501,7 @@ class List {
         document.querySelector('#new_task button').innerText = 'Update Task';
         document.getElementById('new_name').value = this.list[index].name;
         document.getElementById('new_project').value = this.list[index].project;
+        document.getElementById('new_priority').value = this.list[index].priority.toString();
         document.getElementById('new_id').value = this.list[index].id;
 
         if (this.list[index].due > 0) {
@@ -541,6 +557,7 @@ class List {
                 json[i].due,
                 json[i].created,
                 json[i].complete,
+                json[i].priority,
                 json[i].status,
                 json[i].archive
             );
@@ -573,14 +590,23 @@ class List {
             const proj = document.getElementById('new_project').value;
             const name = document.getElementById('new_add').value;
             this.list[index].project = ((proj === '__new__') && (name !== '')) ? name : proj;
-            this.list[index].name    = document.getElementById('new_name').value;
-            this.list[index].due     = document.getElementById('new_due').valueAsNumber;
+            this.list[index].name = document.getElementById('new_name').value;
+            this.list[index].due = document.getElementById('new_due').valueAsNumber;
+            this.list[index].priority = parseInt(document.getElementById('new_priority').value);
 
             // Update Table from Library
             const row = document.getElementById(taskID);
-            row.querySelector('.task_name').innerText    = this.list[index].getName();
+            row.querySelector('.task_name label').innerText = this.list[index].getName();
             row.querySelector('.task_project').innerText = this.list[index].getProject();
-            row.querySelector('.task_due').innerText     = this.list[index].getDue();
+            row.querySelector('.task_due').innerText = this.list[index].getDue();
+
+            if (this.list[index].priority) {
+                row.classList.add('priority')
+            } else {
+                if (row.classList.contains('priority')) {
+                    row.classList.remove('priority');
+                }
+            }
 
         } else {
 
@@ -589,8 +615,8 @@ class List {
             \* * * * * * * * * * * */
 
             let project;
-            const proj    = document.getElementById('new_project').value;
-            const name    = document.getElementById('new_add').value;
+            const proj = document.getElementById('new_project').value;
+            const name = document.getElementById('new_add').value;
             const created = Date.now();
 
             if ((proj === '__new__') && (name !== '')) {
@@ -607,6 +633,7 @@ class List {
                 project,
                 document.getElementById('new_due').valueAsNumber,
                 created.toString(),
+                document.getElementById('new_priority').value,
                 '0',
                 '0',
                 '0'
@@ -779,6 +806,7 @@ class List {
      * Update <tfoot> Stats
      */
     updateStats() {
+        let priority   = 0;
         let incomplete = 0;
         let complete   = 0;
         let archived   = 0;
@@ -794,12 +822,16 @@ class List {
                     complete++;
                 } else {
                     incomplete++;
+                    if (task.priority) {
+                        priority++;
+                    }
                 }
             }
         });
 
         document.getElementById('task_stats').innerHTML = `
             <div>Total:      <span>${total.toLocaleString()}</span></div>
+            <div>Priority:   <span>${priority.toLocaleString()}</span></div>
             <div>Incomplete: <span>${incomplete.toLocaleString()}</span></div>
             <div>Complete:   <span>${complete.toLocaleString()}</span></div>
             <div>Projects:   <span>${projects.toLocaleString()}</span></div>

@@ -9,6 +9,7 @@
  * @property {number} due
  * @property {number} created
  * @property {number} complete
+ * @property {number} priority
  * @property {number} status
  * @property {number} archive
  * @author Dean Wagner <info@deanwagner.net>
@@ -22,6 +23,7 @@ class Task {
     due;
     created;
     complete;
+    priority;
     status;
     archive;
 
@@ -34,15 +36,17 @@ class Task {
      * @param {string} due;
      * @param {string} created
      * @param {string} complete
+     * @param {string} priority
      * @param {string} status
      * @param {string} archive
      */
-    constructor(id, name, project, due, created, complete, status, archive) {
+    constructor(id, name, project, due, created, complete, priority, status, archive) {
         this.id       = id;
         this.name     = name;
         this.project  = project;
         this.due      = parseInt(due);
         this.created  = parseInt(created);
+        this.priority = parseInt(priority);
         this.complete = parseInt(complete);
         this.status   = parseInt(status);
         this.archive  = parseInt(archive);
@@ -90,6 +94,14 @@ class Task {
      */
     getComplete() {
         return Task.#formatDate(this.complete);
+    }
+
+    /**
+     * Get Task Priority
+     * @returns {boolean} - Task Priority
+     */
+    getPriority() {
+        return !!(this.priority);
     }
 
     /**

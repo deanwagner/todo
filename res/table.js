@@ -164,6 +164,12 @@ class Table {
             check = '';
         }
 
+        // Priority Class
+        if(task.getPriority()) {
+            // High Priority
+            row.classList.add('priority');
+        }
+
         // Create HTML String
         let html = `<td class="task_check"><input type="checkbox" id="check_${task.id}"${check}></td>`;
         if ('name' in this.columns) {
