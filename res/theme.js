@@ -102,7 +102,7 @@ class Theme {
 
         // Resize Window Event Listener
         window.addEventListener('resize', () => {
-            if (window.innerHeight >= window.innerWidth) {
+            if ((window.innerHeight >= window.innerWidth) || (window.innerWidth <= 1200)) {
                 document.body.classList.add('collapsed');
             } else {
                 document.body.classList.remove('collapsed');
