@@ -408,6 +408,10 @@ aside span.label {
     white-space: nowrap;
 }
 
+.collapsed aside nav > a:first-child {
+    padding-top: 0;
+}
+
 .collapsed aside span.label {
     position: absolute;
     transition-delay: 0s;
