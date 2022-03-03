@@ -741,7 +741,8 @@ footer {
 \* * * * * * * * */
 
 @media screen and (max-width: 1200px) {
-
+    :root { --mobile-view: 1; }
+    body { font-size: 10pt; }
 }
 
 @media screen and (orientation: portrait) {
