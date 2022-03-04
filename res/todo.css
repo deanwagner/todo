@@ -27,11 +27,18 @@
     --shadow-text   : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
     --shadow-title  : 0.1rem 0.1rem 0.2rem rgba(0,0,0,0.3);
     --shadow-link   : 0.05rem 0.05rem 0.1rem rgba(0,0,0,0.3);
+    --shadow-box    : 0 0 0.3rem rgba(0,0,0,0.3);
+    --shadow-base   : 0.3rem 0.3rem 0;
+    --glow-text     : 0 0 0.1rem var(--color-title);
+    --glow-box      : 0 0 0.5rem var(--color-title);
+    --glow-base     : 0.3rem 0.3rem 0;
+    /*
     --shadow-box    : 0 0 0.3rem rgba(0,0,0,0.3), 0.3rem 0.3rem 0 var(--color-accent);
     --shadow-notice : 0 0 0.3rem rgba(0,0,0,0.3), 0.3rem 0.3rem 0 var(--color-notice);
-    --glow-text     : 0 0 0.1rem var(--color-title);
+
     --glow-box      : 0 0 0.5rem var(--color-title), 0.3rem 0.3rem 0 var(--color-title);
     --glow-notice   : 0 0 0.5rem var(--color-notice), 0.3rem 0.3rem 0 var(--color-notice);
+    */
 
     /* Light Color Scheme */
     color-scheme : light;
@@ -50,11 +57,18 @@
     --dark-shadow-text   : 0.05rem 0.05rem 0.2rem var(--dark-color-shadow);
     --dark-shadow-title  : 0.15rem 0.15rem 0.05rem var(--dark-color-shadow);
     --dark-shadow-link   : 0.1rem 0.1rem 0.1rem var(--dark-color-shadow);
-    --dark-shadow-box    : 0 0 0.5rem rgba(0,0,0,0.8), 0.3rem 0.3rem 0 var(--dark-color-accent);
-    --dark-shadow-notice : 0 0 0.5rem rgba(0,0,0,0.8), 0.3rem 0.3rem 0 var(--dark-color-notice);
+    --dark-shadow-box    : 0 0 0.5rem rgba(0,0,0,0.8);
+    --dark-shadow-base   : 0.3rem 0.3rem 0;
     --dark-glow-text     : 0 0 0.2rem var(--dark-color-title);
-    --dark-glow-box      : 0 0 0.8rem var(--dark-color-title), 0.3rem 0.3rem 0 var(--dark-color-title);
-    --dark-glow-notice   : 0 0 0.8rem var(--dark-color-notice), 0.3rem 0.3rem 0 var(--dark-color-notice);
+    --dark-glow-box      : 0 0 0.8rem var(--dark-color-title);
+    --dark-glow-base     : 0.3rem 0.3rem 0;
+    /*
+    --dark-shadow-box    : 0 0 0.5rem rgba(0,0,0,0.8), 0.3rem 0.3rem 0 var(--color-accent);
+    --dark-shadow-notice : 0 0 0.5rem rgba(0,0,0,0.8), 0.3rem 0.3rem 0 var(--color-notice);
+
+    --dark-glow-box      : 0 0 0.8rem var(--color-title), 0.3rem 0.3rem 0 var(--color-title);
+    --dark-glow-notice   : 0 0 0.8rem var(--color-notice), 0.3rem 0.3rem 0 var(--color-notice);
+    */
 
     /* Dark Color Scheme */
     --dark-color-scheme : dark;
@@ -538,7 +552,7 @@ main table {
 
 main table tr {
     background: var(--color-item) var(--gradient-split);
-    box-shadow: var(--shadow-box);
+    box-shadow: var(--shadow-box), var(--shadow-base) var(--color-accent);
     transition: var(--transition-all);
 }
 
@@ -592,16 +606,16 @@ main thead th .dec::after {
 }
 
 main table tbody tr:hover {
-    box-shadow: var(--glow-box);
+    box-shadow: var(--glow-box), var(--glow-base) var(--color-title);
     outline: var(--border-solid);
 }
 
 main table tr.priority {
-    box-shadow: var(--shadow-notice);
+    box-shadow: var(--shadow-box), var(--shadow-base) var(--color-notice);
 }
 
 main table tbody tr.priority:hover {
-    box-shadow: var(--glow-notice);
+    box-shadow: var(--glow-box), var(--glow-base) var(--color-notice);
     outline: var(--border-notice);
 }
 
@@ -680,7 +694,7 @@ footer {
 
 #modal > div {
     background-color: var(--color-item);
-    box-shadow: var(--shadow-box);
+    box-shadow: var(--shadow-box), var(--shadow-base) var(--color-accent);
     padding: 2em;
 }
 

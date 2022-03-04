@@ -21,6 +21,7 @@ class Theme {
     // CSS Property Keys
     styles = [
         'color-accent',
+        'color-notice',
         'color-shadow',
         'color-bg',
         'color-item',
@@ -57,7 +58,8 @@ class Theme {
         if (this.storage.hasOwnProperty('todo_settings')) {
             // Load from LocalStorage
             this.settings = JSON.parse(this.storage.getItem('todo_settings'));
-            this.setStyleProperty('color-accent', this.settings.accent)
+            this.setStyleProperty('color-accent', this.settings.accent);
+            this.setStyleProperty('color-notice', this.settings.notice);
             if (this.settings.scheme === 'dark') {
                 this.changeMode(this.dark);
             }
@@ -66,11 +68,13 @@ class Theme {
             const isDark = parseInt(this.getStyleProperty('dark-mode'));
             if (isDark) {
                 this.settings.accent = this.dark['color-accent'];
+                this.settings.notice = this.dark['color-notice'];
                 this.settings.scheme = 'dark';
                 this.changeMode(this.dark);
                 this.default = this.settings.scheme;
             } else {
                 this.settings.accent = this.light['color-accent'];
+                this.settings.notice = this.light['color-notice'];
                 this.settings.scheme = 'light';
             }
         }
@@ -81,6 +85,14 @@ class Theme {
         accentColor.addEventListener('input', (e) => {
             this.settings.accent = e.target.value;
             this.setStyleProperty('color-accent', this.settings.accent);
+        });
+
+        // Priority Color
+        const noticeColor = document.getElementById('color-notice');
+        noticeColor.value = this.settings.notice;
+        noticeColor.addEventListener('input', (e) => {
+            this.settings.notice = e.target.value;
+            this.setStyleProperty('color-notice', this.settings.notice);
         });
 
         // Color Scheme
